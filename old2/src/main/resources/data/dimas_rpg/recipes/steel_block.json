@@ -1,0 +1,16 @@
+{
+  "type" : "minecraft:crafting_shaped",
+  "pattern" : [
+    "III",
+    "III",
+    "III"
+  ],
+  "key" : {
+    "I": {
+      "item" : "dimas_rpg:steel_ingot"
+    }
+  },
+  "result": {
+    "item": "dimas_rpg:steel_block"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minectaft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "dimas_rpg:steel_block"
+        }
+      ]
+    }
+  ]
+}

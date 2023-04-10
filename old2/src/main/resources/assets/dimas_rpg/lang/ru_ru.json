@@ -1,0 +1,12 @@
+{
+  "itemGroup.dimas_rpgmodtab" : "Димас РПГ",
+
+  "item.dimas_rpg.steel_ingot" : "Стальной слиток",
+  "item.dimas_rpg.levitation_road": "Жезл левитации",
+
+  "block.dimas_rpg.steel_block" : "Стальной блок",
+
+  "key.category.dimas_rpg.dimas_rpg" : "Димас РПГ",
+
+  "key.dimas_rpg.open_class_menu" : "Открыть меню классов"
+}

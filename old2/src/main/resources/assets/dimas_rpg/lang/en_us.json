@@ -1,0 +1,12 @@
+{
+  "itemGroup.dimas_rpgmodtab" : "Dimas RPG",
+
+  "item.dimas_rpg.steel_ingot" : "Steel Ingot",
+  "item.dimas_rpg.levitation_road": "Levitation Road",
+
+  "block.dimas_rpg.steel_block": "Block of Steel",
+
+  "key.category.dimas_rpg.dimas_rpg" : "Dimas RPG",
+
+  "key.dimas_rpg.open_class_menu" : "Open class menu"
+}
