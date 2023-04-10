@@ -17,8 +17,6 @@ public class ModItems {
     public static final RegistryObject<Item> ESSENCE_CHECKER = ITEMS.register("essence_checker",
             () -> new EssenceCheckerItem(new Item.Properties()));
 
-    public static final RegistryObject<Item> ESSENCE_CHECKER1 = ITEMS.register("essence_checker",
-            () -> Items.IRON_SWORD);
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
