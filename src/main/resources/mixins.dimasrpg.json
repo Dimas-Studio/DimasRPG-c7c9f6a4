@@ -4,6 +4,7 @@
   "package": "com.andrey66.dimasrpg.mixin",
   "refmap": "mixins.dimasrpg.refmap.json",
   "mixins": [
+    "MixinEntity",
     "MixinEntityPlayer",
     "MixinLivingEntity"
   ],
