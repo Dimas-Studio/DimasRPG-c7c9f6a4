@@ -1,5 +1,6 @@
 package com.andrey66.dimasrpg;
 
+// Тестовый интерфейс с гайда TODO: удалить
 public interface EssenceContainer {
 
     float getEssence();

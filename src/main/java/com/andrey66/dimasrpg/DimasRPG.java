@@ -3,14 +3,10 @@ package com.andrey66.dimasrpg;
 import com.andrey66.dimasrpg.attribute.ModAttributes;
 import com.andrey66.dimasrpg.item.ModItems;
 import com.mojang.logging.LogUtils;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CreativeModeTabEvent;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,15 +19,15 @@ import org.slf4j.Logger;
 @Mod(DimasRPG.MOD_ID)
 public class DimasRPG
 {
-    // Define mod id in a common place for everything to reference
+    // регистрация mod id для ссылок из конфиг файлов
     public static final String MOD_ID = "dimasrpg";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger(); // Создание инструмента для логгинга
     public DimasRPG()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModItems.register(modEventBus); // регистрация предметов
-        ModAttributes.register(modEventBus);
+        ModAttributes.register(modEventBus); // регистрация аттрибутов
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);

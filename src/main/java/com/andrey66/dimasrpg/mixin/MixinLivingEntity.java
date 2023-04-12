@@ -37,23 +37,20 @@ public abstract class MixinLivingEntity extends MixinEntity{
     @Shadow(remap = false)
     public abstract CombatTracker getCombatTracker();
 
+    // Привидение объекта из класса MixinLivingEntity к классу LivingEntity
     private LivingEntity toLivingEntity() {
         return (LivingEntity) (Object) this;
     }
 
-
-    @Inject(remap = false, method = "heal", at = @At("RETURN"))
-    private void init(float count, CallbackInfo ci) {
-        if (count <= 0) return;
-        this.setHealth(1);
-    }
-
+    // Метод для добавления своего аттрибута ко всем LivingEntity
     @Inject(
             method = "createLivingAttributes",
             require = 1, allow = 1, at = @At("RETURN"), remap = false)
     private static void addAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
         cir.getReturnValue().add(ModAttributes.MAGIC_RES.get());
     }
+
+    // Метод для изминения вычислений урона
     @Inject(method = "actuallyHurt", remap = false, at = @At("HEAD"), cancellable = true)
     private void reCalculateDamage(DamageSource p_21240_, float p_21241_, CallbackInfo ci) {
         if (!this.isInvulnerableTo(p_21240_)) {
