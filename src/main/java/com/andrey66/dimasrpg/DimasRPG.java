@@ -1,19 +1,26 @@
 package com.andrey66.dimasrpg;
 
 import com.andrey66.dimasrpg.attribute.ModAttributes;
+import com.andrey66.dimasrpg.config.DimasRPGWeaponsCommonConfigs;
 import com.andrey66.dimasrpg.item.ModItems;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
+
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(DimasRPG.MOD_ID)
@@ -29,6 +36,7 @@ public class DimasRPG
         ModItems.register(modEventBus); // регистрация предметов
         ModAttributes.register(modEventBus); // регистрация аттрибутов
         modEventBus.addListener(this::commonSetup);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DimasRPGWeaponsCommonConfigs.SPEC, "dimasrpg-weapon-common.toml");
 
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
