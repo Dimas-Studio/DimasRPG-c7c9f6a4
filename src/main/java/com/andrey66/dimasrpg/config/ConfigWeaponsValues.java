@@ -1,7 +1,6 @@
 package com.andrey66.dimasrpg.config;
 
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 // Класс определения структуры конфига оружий
 public class ConfigWeaponsValues {
@@ -55,6 +54,13 @@ public class ConfigWeaponsValues {
     // Метод получения множества ключей (имён предметов) из конфига
     public static Set<String> getKeys() {
         return CONFIG_SPEC.keySet();
+    }
+
+    public static List<String> getNames() {
+        Set<String> keySet = CONFIG_SPEC.keySet();
+        List<String> keys = new ArrayList<>(keySet);
+        Collections.sort(keys);
+        return keys;
     }
 
     // Метод проверки ключа (имени) на существование

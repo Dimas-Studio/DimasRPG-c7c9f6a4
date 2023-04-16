@@ -24,8 +24,7 @@ public class DimasRPG
     // регистрация mod id для ссылок из конфиг файлов
     public static final String MOD_ID = "dimasrpg";
     public static final Logger LOGGER = LogUtils.getLogger(); // Создание инструмента для логгинга
-    public DimasRPG()
-    {
+    public DimasRPG() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModItems.register(modEventBus); // регистрация предметов
@@ -37,17 +36,10 @@ public class DimasRPG
 
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event)
-    {
+    private void commonSetup(final FMLCommonSetupEvent event) {
 
     }
 
-    @SubscribeEvent
-    public void onCommonSetup(FMLCommonSetupEvent event) {
-
-        DimasRPGWeaponsCommonConfig.initConfig(MOD_ID);
-
-    }
     private void addCreative(CreativeModeTabEvent.BuildContents event) { // Добавление предмета в меню креатива
         if(event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) { // Инструменты
             event.accept(ModItems.ESSENCE_CHECKER);
