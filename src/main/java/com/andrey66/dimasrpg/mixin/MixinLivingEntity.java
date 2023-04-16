@@ -1,16 +1,24 @@
 package com.andrey66.dimasrpg.mixin;
 
 import com.andrey66.dimasrpg.attribute.ModAttributes;
+import com.andrey66.dimasrpg.config.ConfigWeaponsValues;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.damagesource.CombatTracker;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,14 +26,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Objects;
 
 
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity extends MixinEntity{
     @Shadow(remap = false)
     public abstract void setHealth(float p_21154_);
-    @Shadow(remap = false)
-    protected abstract float getDamageAfterArmorAbsorb(DamageSource p_21162_, float p_21163_);
     @Shadow(remap = false)
     protected abstract float getDamageAfterMagicAbsorb(DamageSource p_21162_, float p_21163_);
     @Shadow(remap = false)
@@ -36,6 +43,35 @@ public abstract class MixinLivingEntity extends MixinEntity{
     public abstract float getHealth();
     @Shadow(remap = false)
     public abstract CombatTracker getCombatTracker();
+    @Shadow(remap = false)
+    protected abstract void hurtArmor(DamageSource p_21122_, float p_21123_);
+    @Shadow(remap = false)
+    public abstract int getArmorValue();
+    @Shadow(remap = false)
+    public abstract double getAttributeValue(Attribute p_21134_);
+    @Shadow(remap = false)
+    public abstract ItemStack getItemInHand(InteractionHand p_21121_);
+
+    protected float getDamageAfterArmorAbsorb(DamageSource damageSource, float damage) {
+        if (damageSource.getEntity() instanceof LivingEntity){
+            Item item = ((LivingEntity) damageSource.getEntity()).getItemInHand(InteractionHand.MAIN_HAND).getItem();
+            String itemString = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)).toString();
+            if (!damageSource.isBypassArmor()) { //TODO: позможно стоит посмотреть на этот метод
+                if (ConfigWeaponsValues.exist(itemString)) {
+                    if (Objects.equals(ConfigWeaponsValues.getType(itemString), "melee")) {
+                        this.hurtArmor(damageSource, damage);
+                        damage = CombatRules.getDamageAfterAbsorb(damage, (float)this.getArmorValue(), (float)this.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+                    } else {
+                        return 0;
+                    }
+                } else {
+                    this.hurtArmor(damageSource, damage);
+                    damage = CombatRules.getDamageAfterAbsorb(damage, (float)this.getArmorValue(), (float)this.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+                }
+            }
+        }
+        return damage;
+    }
 
     // Привидение объекта из класса MixinLivingEntity к классу LivingEntity
     private LivingEntity toLivingEntity() {
@@ -47,35 +83,39 @@ public abstract class MixinLivingEntity extends MixinEntity{
             method = "createLivingAttributes",
             require = 1, allow = 1, at = @At("RETURN"), remap = false)
     private static void addAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
-        cir.getReturnValue().add(ModAttributes.MAGIC_RES.get());
+        cir.getReturnValue().add(ModAttributes.MAGIC_RES.get()).add(ModAttributes.DAMAGE_TYPE.get());
     }
 
     // Метод для изминения вычислений урона
     @Inject(method = "actuallyHurt", remap = false, at = @At("HEAD"), cancellable = true)
-    private void reCalculateDamage(DamageSource p_21240_, float p_21241_, CallbackInfo ci) {
-        if (!this.isInvulnerableTo(p_21240_)) {
-            if (Minecraft.getInstance().player != null)
-                Minecraft.getInstance().player.sendSystemMessage(
-                    Component.literal("ATTACK!: " ).withStyle(ChatFormatting.YELLOW));
-            p_21241_ = net.minecraftforge.common.ForgeHooks.onLivingHurt(this.toLivingEntity(), p_21240_, p_21241_);
-            if (p_21241_ <= 0) ci.cancel();
-            p_21241_ = this.getDamageAfterArmorAbsorb(p_21240_, p_21241_);
-            p_21241_ = this.getDamageAfterMagicAbsorb(p_21240_, p_21241_);
-            float f2 = Math.max(p_21241_ - this.getAbsorptionAmount(), 0.0F);
-            this.setAbsorptionAmount(this.getAbsorptionAmount() - (p_21241_ - f2));
-            float f = p_21241_ - f2;
-            if (f > 0.0F && f < 3.4028235E37F && p_21240_.getEntity() instanceof ServerPlayer) {
-                ((ServerPlayer)p_21240_.getEntity()).awardStat(Stats.CUSTOM.get(Stats.DAMAGE_DEALT_ABSORBED), Math.round(f * 10.0F));
+    private void reCalculateDamage(DamageSource damageSource, float damage, CallbackInfo ci) {
+        if (!this.isInvulnerableTo(damageSource)) {
+            damage = net.minecraftforge.common.ForgeHooks.onLivingHurt(this.toLivingEntity(), damageSource, damage);
+            if (damage <= 0) ci.cancel();
+
+
+            damage = this.getDamageAfterArmorAbsorb(damageSource, damage);
+            //damage = this.getDamageAfterMagicAbsorb(damageSource, damage);
+            float f2 = Math.max(damage - this.getAbsorptionAmount(), 0.0F);
+            this.setAbsorptionAmount(this.getAbsorptionAmount() - (damage - f2));
+            float f = damage - f2;
+            if (f > 0.0F && f < 3.4028235E37F && damageSource.getEntity() instanceof ServerPlayer) {
+                ((ServerPlayer)damageSource.getEntity()).awardStat(Stats.CUSTOM.get(Stats.DAMAGE_DEALT_ABSORBED), Math.round(f * 10.0F));
             }
 
-            f2 = net.minecraftforge.common.ForgeHooks.onLivingDamage(this.toLivingEntity(), p_21240_, f2);
+            f2 = net.minecraftforge.common.ForgeHooks.onLivingDamage(this.toLivingEntity(), damageSource, f2);
             if (f2 != 0.0F) {
                 float f1 = this.getHealth();
-                this.getCombatTracker().recordDamage(p_21240_, f1, f2);
+                this.getCombatTracker().recordDamage(damageSource, f1, f2);
                 this.setHealth(f1 - f2); // Forge: moved to fix MC-121048
                 this.setAbsorptionAmount(this.getAbsorptionAmount() - f2);
                 this.gameEvent(GameEvent.ENTITY_DAMAGE);
+
+                if (Minecraft.getInstance().player != null)
+                    Minecraft.getInstance().player.sendSystemMessage(
+                            Component.literal(String.valueOf((f1 - f2))).withStyle(ChatFormatting.YELLOW));
             }
         }
+        ci.cancel();
     }
 }

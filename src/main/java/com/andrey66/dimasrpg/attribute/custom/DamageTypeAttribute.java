@@ -6,18 +6,17 @@ import java.util.Objects;
 
 // Класс для нового аттрибута типа урона
 public class DamageTypeAttribute extends Attribute{
-    private final double defaultValue;
-    private final String descriptionId;
-    public DamageTypeAttribute(String name, String type) {
-        super(name, 1);
-        this.descriptionId = name;
-        if (Objects.equals(type, "range")) {
-            this.defaultValue = 2;
-        } else if (Objects.equals(type, "magic")) {
-            this.defaultValue = 3;
-        } else {
-            this.defaultValue = 1;
-        }
+    public DamageTypeAttribute(String name, Double type) {
+        super(name, type);
+    }
 
+    public static double getTypeFromString(String type) {
+        if (Objects.equals(type, "range")) {
+            return  2;
+        } else if (Objects.equals(type, "magic")) {
+            return  3;
+        } else {
+            return  1;
+        }
     }
 }

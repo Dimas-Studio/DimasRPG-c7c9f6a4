@@ -10,11 +10,9 @@ public class ConfigWeaponsValues {
 
     // Метод настройки конфига по умолчанию
     public static void setDefaultConfigValues() {
-        put("minecraft:item1", "melee", 0);
-        put("minecraft:item2", "melee", 0);
-        put("minecraft:item3", "melee", 0);
-        put("minecraft:item4", "melee", 0);
-        put("minecraft:item5", "melee", 0);
+        put("minecraft:iron_sword", "melee", 20);
+        put("minecraft:diamond_sword", "melee", 40);
+        put("minecraft:bow", "range", 30);
     }
 
     // Метод очистки настроек конфига (используется для очистки настроек по умолчанию для замены их настройками их файла)
@@ -39,6 +37,7 @@ public class ConfigWeaponsValues {
         }
         return null;
     }
+
 
     // метод пролучения количества урона предмета
     public static Float getValue(String name) {

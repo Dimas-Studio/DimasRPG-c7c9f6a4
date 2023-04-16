@@ -24,7 +24,7 @@ public class ModAttributes {
     public static final RegistryObject<Attribute> MAGIC_RES = ATTRIBUTES.register("magic_res",
             () -> new MagicResAttribute("magic_res", 0.0));
     public static final RegistryObject<Attribute> DAMAGE_TYPE = ATTRIBUTES.register("damage_type",
-            () -> new DamageTypeAttribute("damage_type", "melee"));
+            () -> new DamageTypeAttribute("damage_type", DamageTypeAttribute.getTypeFromString("melee")));
 
     // Метод-триггер для вызова из главного класса мода
     public static void register(IEventBus eventBus) {
