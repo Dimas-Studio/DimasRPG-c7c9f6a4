@@ -22,7 +22,7 @@ import java.util.*;
 
 @Mixin(ItemStack.class)
 public abstract class MixinItemStack {
-    @Shadow(remap = false)
+    @Shadow
     public abstract Item getItem();
 
     private boolean CheckItemsNames(String itemString, String configString) {
@@ -81,7 +81,7 @@ public abstract class MixinItemStack {
     }
 
     // Изминение атрибутов для предметов из конфига
-    @Inject(method = "getAttributeModifiers", at = @At("RETURN"), cancellable = true, remap = false)
+    @Inject(method = "getAttributeModifiers", at = @At("RETURN"), cancellable = true)
     private void modifyAttributeModifiers(EquipmentSlot equipmentSlot, CallbackInfoReturnable<Multimap<Attribute, AttributeModifier>> callbackInfo) {
         String item_id = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(this.getItem())).toString();
 

@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -25,7 +26,8 @@ public class EssenceCheckerItem extends Item {
 
     // Переопределение метода use для тестирования
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, @NotNull InteractionHand hand) {
+        player.sendSystemMessage(Component.literal("Your magic resistance: " + !level.isClientSide()));
         if (!level.isClientSide() && hand == InteractionHand.MAIN_HAND && player.isShiftKeyDown()){
             LivingEntity livingEntity = player;
             double magic_res = Objects.requireNonNull(livingEntity.getAttribute(ModAttributes.MAGIC_RES.get())).getValue();

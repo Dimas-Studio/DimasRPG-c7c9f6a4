@@ -32,25 +32,25 @@ import java.util.Objects;
 
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity extends MixinEntity{
-    @Shadow(remap = false)
+    @Shadow
     public abstract void setHealth(float p_21154_);
-    @Shadow(remap = false)
+    @Shadow
     protected abstract float getDamageAfterMagicAbsorb(DamageSource p_21162_, float p_21163_);
-    @Shadow(remap = false)
+    @Shadow
     public abstract float getAbsorptionAmount();
-    @Shadow(remap = false)
+    @Shadow
     public abstract void setAbsorptionAmount(float p_21328_);
-    @Shadow(remap = false)
+    @Shadow
     public abstract float getHealth();
-    @Shadow(remap = false)
+    @Shadow
     public abstract CombatTracker getCombatTracker();
-    @Shadow(remap = false)
+    @Shadow
     protected abstract void hurtArmor(DamageSource p_21122_, float p_21123_);
-    @Shadow(remap = false)
+    @Shadow
     public abstract int getArmorValue();
-    @Shadow(remap = false)
+    @Shadow
     public abstract double getAttributeValue(Attribute p_21134_);
-    @Shadow(remap = false)
+    @Shadow
     public abstract ItemStack getItemInHand(InteractionHand p_21121_);
 
     protected float getDamageAfterArmorAbsorb(DamageSource damageSource, float damage) {
@@ -82,13 +82,13 @@ public abstract class MixinLivingEntity extends MixinEntity{
     // Метод для добавления своего аттрибута ко всем LivingEntity
     @Inject(
             method = "createLivingAttributes",
-            require = 1, allow = 1, at = @At("RETURN"), remap = false)
+            require = 1, allow = 1, at = @At("RETURN"))
     private static void addAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
         cir.getReturnValue().add(ModAttributes.MAGIC_RES.get()).add(ModAttributes.DAMAGE_TYPE.get());
     }
 
     // Метод для изминения вычислений урона
-    @Inject(method = "actuallyHurt", remap = false, at = @At("HEAD"), cancellable = true)
+    @Inject(method = "actuallyHurt", at = @At("HEAD"), cancellable = true)
     private void reCalculateDamage(DamageSource damageSource, float damage, CallbackInfo ci) {
         if (!this.isInvulnerableTo(damageSource)) {
             damage = net.minecraftforge.common.ForgeHooks.onLivingHurt(this.toLivingEntity(), damageSource, damage);
