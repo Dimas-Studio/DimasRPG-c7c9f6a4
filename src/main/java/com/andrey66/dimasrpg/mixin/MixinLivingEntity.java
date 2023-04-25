@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.damagesource.CombatTracker;
@@ -56,7 +57,7 @@ public abstract class MixinLivingEntity extends MixinEntity{
         if (damageSource.getEntity() instanceof LivingEntity){
             Item item = ((LivingEntity) damageSource.getEntity()).getItemInHand(InteractionHand.MAIN_HAND).getItem();
             String itemString = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)).toString();
-            if (!damageSource.isBypassArmor()) { //TODO: позможно стоит посмотреть на этот метод
+            if (!damageSource.is(DamageTypeTags.BYPASSES_ARMOR)) { //TODO: позможно стоит посмотреть на этот метод
                 if (ConfigWeaponsValues.exist(itemString)) {
                     if (Objects.equals(ConfigWeaponsValues.getType(itemString), "melee")) {
                         this.hurtArmor(damageSource, damage);
@@ -92,8 +93,6 @@ public abstract class MixinLivingEntity extends MixinEntity{
         if (!this.isInvulnerableTo(damageSource)) {
             damage = net.minecraftforge.common.ForgeHooks.onLivingHurt(this.toLivingEntity(), damageSource, damage);
             if (damage <= 0) ci.cancel();
-
-
             damage = this.getDamageAfterArmorAbsorb(damageSource, damage);
             //damage = this.getDamageAfterMagicAbsorb(damageSource, damage);
             float f2 = Math.max(damage - this.getAbsorptionAmount(), 0.0F);
