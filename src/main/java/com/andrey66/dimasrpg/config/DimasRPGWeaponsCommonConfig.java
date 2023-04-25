@@ -31,7 +31,7 @@ public class DimasRPGWeaponsCommonConfig {
             .setPrettyPrinting().create();
 
     // Инициализация конфига (вызывается из основного класса мода)
-    public static void initConfig(String modid) {
+    public static void initConfig(String mod_id) {
 
         // Установка базовых значений конфига
         ConfigWeaponsValues.setDefaultConfigValues();
@@ -39,7 +39,7 @@ public class DimasRPGWeaponsCommonConfig {
         // Получение пути дирректории хранения конфигов
         // TODO: Добавить папку для конфигов мода
         Path configDir = FMLPaths.CONFIGDIR.get();
-        file = configDir.resolve(modid + "-weapons-common.json").toFile();
+        file = configDir.resolve(mod_id + "-weapons-common.json").toFile();
 
         if(!file.exists()) {
             // Конфиг файл не найден, создаём новый с значениями по умолчанию
@@ -96,7 +96,7 @@ public class DimasRPGWeaponsCommonConfig {
         Arrays.sort(names);
 
         // Общий словарь всего конфига
-        HashMap<String, HashMap<String, Float>> items = new HashMap<String, HashMap<String, Float>>();
+        HashMap<String, HashMap<String, Float>> items = new HashMap<>();
 
         for(Object name : names) {
             if(((String) name).matches("\\w+:\\w+")) {    // Провкрка на: "minecraft:creeper"

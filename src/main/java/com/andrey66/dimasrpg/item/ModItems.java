@@ -8,10 +8,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 // Класс для регистрации новых предметов с особыми свойствами
 public class ModItems {
 

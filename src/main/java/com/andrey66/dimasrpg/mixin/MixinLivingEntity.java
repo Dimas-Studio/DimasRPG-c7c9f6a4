@@ -17,7 +17,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,8 +34,6 @@ public abstract class MixinLivingEntity extends MixinEntity{
     @Shadow
     public abstract void setHealth(float p_21154_);
     @Shadow
-    protected abstract float getDamageAfterMagicAbsorb(DamageSource p_21162_, float p_21163_);
-    @Shadow
     public abstract float getAbsorptionAmount();
     @Shadow
     public abstract void setAbsorptionAmount(float p_21328_);
@@ -50,8 +47,6 @@ public abstract class MixinLivingEntity extends MixinEntity{
     public abstract int getArmorValue();
     @Shadow
     public abstract double getAttributeValue(Attribute p_21134_);
-    @Shadow
-    public abstract ItemStack getItemInHand(InteractionHand p_21121_);
 
     protected float getDamageAfterArmorAbsorb(DamageSource damageSource, float damage) {
         if (damageSource.getEntity() instanceof LivingEntity){

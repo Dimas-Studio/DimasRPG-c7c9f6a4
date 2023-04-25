@@ -6,7 +6,7 @@ import java.util.*;
 public class ConfigWeaponsValues {
 
     // Хрант в себе словарь из конфиг файла
-    private static final HashMap<String, HashMap<String, Float>> CONFIG_SPEC = new HashMap<String, HashMap<String, Float>>();
+    private static final HashMap<String, HashMap<String, Float>> CONFIG_SPEC = new HashMap<>();
 
     // Метод настройки конфига по умолчанию
     public static void setDefaultConfigValues() {
@@ -30,7 +30,7 @@ public class ConfigWeaponsValues {
     // Метод получения типа урона предмета
     public static String getType(String name) {
         if(CONFIG_SPEC.containsKey(name)){
-            String type = "";
+            String type;
             Set<String> keys = CONFIG_SPEC.get(name).keySet();
             type = keys.iterator().next();
             return type;
@@ -42,7 +42,7 @@ public class ConfigWeaponsValues {
     // метод пролучения количества урона предмета
     public static Float getValue(String name) {
         if(CONFIG_SPEC.containsKey(name)){
-            String type = "";
+            String type;
             Set<String> keys = CONFIG_SPEC.get(name).keySet();
             type = keys.iterator().next();
             return CONFIG_SPEC.get(name).get(type);
@@ -54,14 +54,14 @@ public class ConfigWeaponsValues {
     public static Set<String> getKeys() {
         return CONFIG_SPEC.keySet();
     }
-
+/*
     public static List<String> getNames() {
         Set<String> keySet = CONFIG_SPEC.keySet();
         List<String> keys = new ArrayList<>(keySet);
         Collections.sort(keys);
         return keys;
     }
-
+*/
     // Метод проверки ключа (имени) на существование
     public static Boolean exist(String name) {
         return CONFIG_SPEC.containsKey(name);

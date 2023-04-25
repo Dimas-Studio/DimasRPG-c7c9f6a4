@@ -1,7 +1,5 @@
 package com.andrey66.dimasrpg.mixin;
 
-import com.andrey66.dimasrpg.attribute.ModAttributes;
-import com.andrey66.dimasrpg.attribute.custom.DamageTypeAttribute;
 import com.andrey66.dimasrpg.config.ConfigWeaponsValues;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -25,20 +23,7 @@ public abstract class MixinItemStack {
     @Shadow
     public abstract Item getItem();
 
-    private boolean CheckItemsNames(String itemString, String configString) {
-        String[] strArray = itemString.split("\\.");
-        List<String> itemList = Arrays.asList(strArray);
-        if (itemList.size() != 3) {
-            return false;
-        }
-        if (!itemList.get(0).equals("item")) {
-            return false;
-        }
-
-        String newItemString = itemList.get(1) + ":" + itemList.get(2);
-        return newItemString.equals(configString);
-    }
-
+    /*
     // Константа для порядка атрибутов оружия
     private List<Attribute> getAttributeOrder() {
         // задаем порядок атрибутов для мечей
@@ -47,15 +32,15 @@ public abstract class MixinItemStack {
         attributeOrder.add(Attributes.ATTACK_SPEED);
         return attributeOrder;
     }
+    */
 
     // Метод смены атрибута ATTACK_DAMAGE
-    private Multimap<Attribute, AttributeModifier> changeAttribute(Multimap<Attribute, AttributeModifier> original, float value, Attribute attribute) {
+    private Multimap<Attribute, AttributeModifier> changeAttribute(Multimap<Attribute, AttributeModifier> original, float value) { // TODO: добавить параметр аттрибута
         Multimap<Attribute, AttributeModifier> modifiers = HashMultimap.create();
-        boolean F = false;
         for (Map.Entry<Attribute, AttributeModifier> entry : original.entries()) {
             Attribute itemAttribute = entry.getKey();
             AttributeModifier modifier = entry.getValue();
-            if (itemAttribute == attribute) {
+            if (itemAttribute == Attributes.ATTACK_DAMAGE) { // TODO: Заменить константу на параметр аттрибута
                 modifiers.put(itemAttribute, new AttributeModifier(modifier.getId(), modifier.getName(), value, modifier.getOperation()));
             } else {
                 modifiers.put(itemAttribute, modifier);
@@ -66,6 +51,7 @@ public abstract class MixinItemStack {
     }
 
 
+    /*
     private Multimap<Attribute, AttributeModifier> addAttribute(Multimap<Attribute, AttributeModifier> original, float value, Attribute attribute) {
         Multimap<Attribute, AttributeModifier> modifiers = HashMultimap.create();
         //for (Map.Entry<Attribute, AttributeModifier> entry : original.entries()) {
@@ -79,7 +65,7 @@ public abstract class MixinItemStack {
         //modifiers.put(attribute, new AttributeModifier(UUID.randomUUID(), attribute.getDescriptionId(), value, AttributeModifier.Operation.ADDITION));
         return modifiers;
     }
-
+    */
     // Изминение атрибутов для предметов из конфига
     @Inject(method = "getAttributeModifiers", at = @At("RETURN"), cancellable = true)
     private void modifyAttributeModifiers(EquipmentSlot equipmentSlot, CallbackInfoReturnable<Multimap<Attribute, AttributeModifier>> callbackInfo) {
@@ -88,23 +74,24 @@ public abstract class MixinItemStack {
         // Оружие
         if (ConfigWeaponsValues.exist(item_id)) {
             Float damage = ConfigWeaponsValues.getValue(item_id);
-            String type = ConfigWeaponsValues.getType(item_id);
             if (damage == null) {
                 return;
             }
 
             Multimap<Attribute, AttributeModifier> modifiers = callbackInfo.getReturnValue();
-            modifiers = changeAttribute(modifiers, damage, Attributes.ATTACK_DAMAGE);
+            modifiers = changeAttribute(modifiers, damage);
 
             // меняем порядок атрибутов
-            //List<Attribute> attributeOrder = getAttributeOrder();
-            //ArrayListMultimap<Attribute, AttributeModifier> orderedModifiers = ArrayListMultimap.create();
-            //for (Attribute attribute : attributeOrder) {
-            //    if (modifiers.containsKey(attribute)) {
-            //        orderedModifiers.putAll(attribute, modifiers.get(attribute));
-            //    }
-            //}
+            /*
+            List<Attribute> attributeOrder = getAttributeOrder();
+            ArrayListMultimap<Attribute, AttributeModifier> orderedModifiers = ArrayListMultimap.create();
+            for (Attribute attribute : attributeOrder) {
+                if (modifiers.containsKey(attribute)) {
+                    orderedModifiers.putAll(attribute, modifiers.get(attribute));
+                }
+            }*/
             callbackInfo.setReturnValue(modifiers);
+
         }
     }
 }
