@@ -1,3 +1,7 @@
 {
-  "item.dimasrpg.essence_checker": "Essence Checker"
+  "item.dimasrpg.essence_checker": "Essence Checker",
+
+  "key.dimasrpg.melee_type_description": "§cMelee weapon",
+  "key.dimasrpg.range_type_description": "§aRange weapon",
+  "key.dimasrpg.magic_type_description": "§5Magic weapon"
 }

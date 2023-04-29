@@ -5,6 +5,7 @@
   "refmap": "mixins.dimasrpg.refmap.json",
   "mixins": [
     "MixinEntity",
+    "MixinItem",
     "MixinItemStack",
     "MixinLivingEntity"
   ],
