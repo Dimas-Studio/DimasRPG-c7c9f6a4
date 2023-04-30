@@ -52,12 +52,10 @@ public class MixinItem {
             String item_id = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(itemStack.getItem())).toString();
             if (!root.contains("AttributeModifiers") && ConfigArmorValues.exist(item_id)) {
                 String attributeName = "";
-                String name = "";
                 String type;
                 boolean changeAttribute = false;
                 double amount;
                 String slot;
-                Debug.printToChat(ConfigArmorValues.getSlots(item_id).toString());
                 for (Map.Entry<String, HashMap<String, Float>> slots : Objects.requireNonNull(ConfigArmorValues.getSlots(item_id)).entrySet()) {
                     slot = slots.getKey();
                     for (Map.Entry<String, Float> values : Objects.requireNonNull(ConfigArmorValues.getTypes(item_id, slot)).entrySet()){
