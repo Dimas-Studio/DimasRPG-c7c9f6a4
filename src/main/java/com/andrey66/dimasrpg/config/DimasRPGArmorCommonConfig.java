@@ -41,7 +41,7 @@ public class DimasRPGArmorCommonConfig {
         else {
             // Конфиг файл найден, начинаем чтение
             DimasRPG.LOGGER.info("Reading config armor values from file.");
-            //readConfig();
+            readConfig();
         }
     }
 
@@ -64,9 +64,7 @@ public class DimasRPGArmorCommonConfig {
                     Type pattern = new TypeToken<Map<String, Float>>() {
                     }.getType();
                     Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
-                    String type = innerMap.keySet().iterator().next();
-                    Float value = innerMap.get(type);
-                    //ConfigArmorValues.put(name, type, value);
+                    ConfigArmorValues.put(name, (HashMap<String, Float>) innerMap);
                 }
             }
             // Закрытие файла для чтения
@@ -123,27 +121,32 @@ public class DimasRPGArmorCommonConfig {
                 String name = entry.getKey();
                 Type pattern = new TypeToken<Map<String, Float>>() {}.getType();
                 Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
-                String type = innerMap.keySet().iterator().next();
-                Float value = innerMap.get(type);
+
 
                 if (name == null || name.isEmpty()) {
-                    return false;
-                }
-                if (type == null || type.isEmpty()) {
-                    return false;
-                }
-                if (value < 0) {
-                    return false;
-                }
-                if (innerMap.size() != 1) {
-                    return false;
-                }
-                if (!type.matches("^(magic|range|melee)$")) {
                     return false;
                 }
                 if (!name.matches("^[a-z0-9_-]+:[a-z0-9+_-]+$")) {
                     return false;
                 }
+
+                for (Map.Entry<String, Float> entry1 : innerMap.entrySet()) {
+                    String type = entry1.getKey();
+                    Float value = entry1.getValue();
+                    if (type == null || type.isEmpty()) {
+                        return false;
+                    }
+                    if (value < 0) {
+                        return false;
+                    }
+                    if (innerMap.size() != 1) {
+                        return false;
+                    }
+                    if (!type.matches("^(magic|range|melee)$")) {
+                        return false;
+                    }
+                }
+
             } catch (Exception e){
                 return false;
             }

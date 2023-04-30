@@ -1,6 +1,7 @@
 package com.andrey66.dimasrpg.item.custom;
 
 import com.andrey66.dimasrpg.attribute.ModAttributes;
+import com.andrey66.dimasrpg.config.ConfigArmorValues;
 import com.andrey66.dimasrpg.config.ConfigWeaponsValues;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -27,7 +28,7 @@ public class EssenceCheckerItem extends Item {
             double magic_res = Objects.requireNonNull(player.getAttribute(ModAttributes.MAGIC_RES.get())).getValue();
             player.sendSystemMessage(Component.literal("Your magic resistance: " + magic_res));
 
-            if (ConfigWeaponsValues.exist("minecraft:iron_sword")) {
+            if (ConfigArmorValues.exist("minecraft:diamond_chestplate")) {
                 String value = Objects.requireNonNull(ConfigWeaponsValues.getValue("minecraft:iron_sword")).toString();
                 player.sendSystemMessage(Component.literal("Iron_sword have " + value + " " + ConfigWeaponsValues.getType("minecraft:iron_sword") + " damage"));
             } else {
