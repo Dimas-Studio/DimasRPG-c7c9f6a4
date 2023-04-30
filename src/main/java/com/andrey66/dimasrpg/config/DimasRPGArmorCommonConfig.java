@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 // Класс для работы с файлом конфига брони
 public class DimasRPGArmorCommonConfig {
@@ -90,7 +91,7 @@ public class DimasRPGArmorCommonConfig {
         for(Object name : names) {
             if(((String) name).matches("\\w+:\\w+")) {    // Провкрка на: "minecraft:creeper"
                 HashMap<String, Float> innerMap = new HashMap<>();
-                for (Map.Entry<String, Float> entry : ConfigArmorValues.getTypes((String) name).entrySet()) {
+                for (Map.Entry<String, Float> entry : Objects.requireNonNull(ConfigArmorValues.getTypes((String) name)).entrySet()) {
                     String type = entry.getKey();
                     Float value = entry.getValue();
                     innerMap.put(type, value);

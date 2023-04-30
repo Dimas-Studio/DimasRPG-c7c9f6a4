@@ -12,7 +12,7 @@ public class ConfigArmorValues {
 
     // Метод настройки конфига по умолчанию
     public static void setDefaultConfigValues() {
-        put("minecraft:diamond_chestplate", new HashMap<String, Float>(){{
+        put("minecraft:diamond_chestplate", new HashMap<>(){{
             put("melee", 10.0f);
             put("range", 11.0f);
         }});
