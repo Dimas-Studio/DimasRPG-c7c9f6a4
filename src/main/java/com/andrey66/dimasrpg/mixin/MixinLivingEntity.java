@@ -79,7 +79,11 @@ public abstract class MixinLivingEntity extends MixinEntity{
             method = "createLivingAttributes",
             require = 1, allow = 1, at = @At("RETURN"))
     private static void addAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
-        cir.getReturnValue().add(ModAttributes.MAGIC_RES.get()).add(ModAttributes.DAMAGE_TYPE.get());
+        cir.getReturnValue()
+                .add(ModAttributes.MAGIC_ARMOR.get())
+                .add(ModAttributes.DAMAGE_TYPE.get())
+                .add(ModAttributes.MELEE_ARMOR.get())
+                .add(ModAttributes.RANGE_ARMOR.get());
     }
 
     // Метод для изминения вычислений урона

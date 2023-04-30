@@ -2,7 +2,7 @@ package com.andrey66.dimasrpg.attribute;
 
 import com.andrey66.dimasrpg.DimasRPG;
 import com.andrey66.dimasrpg.attribute.custom.DamageTypeAttribute;
-import com.andrey66.dimasrpg.attribute.custom.MagicResAttribute;
+import com.andrey66.dimasrpg.attribute.custom.MagicArmorAttribute;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -18,8 +18,12 @@ public class ModAttributes {
 
 
     // Регистрация аттрибута magic_res
-    public static final RegistryObject<Attribute> MAGIC_RES = ATTRIBUTES.register("magic_res",
-            () -> new MagicResAttribute("magic_res", 0.0));
+    public static final RegistryObject<Attribute> MELEE_ARMOR = ATTRIBUTES.register("melee_armor",
+            () -> new MagicArmorAttribute("melee_armor", 0.0));
+    public static final RegistryObject<Attribute> RANGE_ARMOR = ATTRIBUTES.register("range_armor",
+            () -> new MagicArmorAttribute("range_armor", 0.0));
+    public static final RegistryObject<Attribute> MAGIC_ARMOR = ATTRIBUTES.register("magic_armor",
+            () -> new MagicArmorAttribute("magic_armor", 0.0));
     public static final RegistryObject<Attribute> DAMAGE_TYPE = ATTRIBUTES.register("damage_type",
             () -> new DamageTypeAttribute("damage_type", DamageTypeAttribute.getTypeFromString("melee")));
 
