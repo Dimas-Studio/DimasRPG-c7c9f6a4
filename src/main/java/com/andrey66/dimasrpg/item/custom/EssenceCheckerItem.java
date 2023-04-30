@@ -23,25 +23,8 @@ public class EssenceCheckerItem extends Item {
     // Переопределение метода use для тестирования
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, @NotNull InteractionHand hand) {
-        player.sendSystemMessage(Component.literal("Your magic resistance: " + !level.isClientSide()));
-        if (!level.isClientSide() && hand == InteractionHand.MAIN_HAND && player.isShiftKeyDown()){
-            double magic_res = Objects.requireNonNull(player.getAttribute(ModAttributes.MAGIC_RES.get())).getValue();
-            player.sendSystemMessage(Component.literal("Your magic resistance: " + magic_res));
+        player.sendSystemMessage(Component.literal(ConfigArmorValues.getKeys().toString()));
 
-            if (ConfigArmorValues.exist("minecraft:diamond_chestplate")) {
-                String value = Objects.requireNonNull(ConfigWeaponsValues.getValue("minecraft:iron_sword")).toString();
-                player.sendSystemMessage(Component.literal("Iron_sword have " + value + " " + ConfigWeaponsValues.getType("minecraft:iron_sword") + " damage"));
-            } else {
-                player.sendSystemMessage(Component.literal("Iron_sword have default damage"));
-            }
-            player.sendSystemMessage(Component.literal(Double.toString(Objects.requireNonNull(player.getAttribute(ModAttributes.MAGIC_RES.get())).getValue())));
-
-
-        } else if (!level.isClientSide() && hand == InteractionHand.MAIN_HAND) {
-            double value =  Objects.requireNonNull(player.getAttribute(ModAttributes.MAGIC_RES.get())).getValue();
-            Objects.requireNonNull(player.getAttribute(ModAttributes.MAGIC_RES.get())).setBaseValue(value+1);
-            player.sendSystemMessage(Component.literal("Done"));
-        }
         return super.use(level, player, hand);
     }
 }
