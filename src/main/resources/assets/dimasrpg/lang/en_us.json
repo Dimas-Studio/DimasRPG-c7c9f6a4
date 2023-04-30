@@ -3,5 +3,9 @@
 
   "key.dimasrpg.melee_type_description": "§cMelee weapon",
   "key.dimasrpg.range_type_description": "§aRange weapon",
-  "key.dimasrpg.magic_type_description": "§5Magic weapon"
+  "key.dimasrpg.magic_type_description": "§5Magic weapon",
+  
+  "attribute.name.melee_armor" : "§cMelee Armor",
+  "attribute.name.range_armor" : "§aRange Armor",
+  "attribute.name.magic_armor" : "§5Magic Armor"
 }
