@@ -13,6 +13,7 @@ public class ConfigWeaponsValues {
         put("minecraft:iron_sword", "melee", 20);
         put("minecraft:diamond_sword", "melee", 40);
         put("minecraft:bow", "range", 30);
+        put("minecraft:air", "melee", 0);
     }
 
     // Метод очистки настроек конфига (используется для очистки настроек по умолчанию для замены их настройками их файла)

@@ -1,5 +1,6 @@
 package com.andrey66.dimasrpg.item.custom;
 
+import com.andrey66.dimasrpg.Debug;
 import com.andrey66.dimasrpg.attribute.ModAttributes;
 import com.andrey66.dimasrpg.config.ConfigArmorValues;
 import com.andrey66.dimasrpg.config.ConfigWeaponsValues;
@@ -9,6 +10,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +25,9 @@ public class EssenceCheckerItem extends Item {
     // Переопределение метода use для тестирования
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, @NotNull InteractionHand hand) {
-        player.sendSystemMessage(Component.literal(ConfigArmorValues.getKeys().toString()));
+        Item item = Items.IRON_HOE;
+
+        Debug.printToChat(item.getDescriptionId());
 
         return super.use(level, player, hand);
     }

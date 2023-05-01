@@ -1,10 +1,16 @@
 {
-  "item.dimasrpg.essence_checker": "Essence Checker",
+  "item.dimasrpg.essence_checker": "Essence Checker",  
+  "key.dimasrpg.weapon_alert": "not in weapons config!",
+
 
   "key.dimasrpg.melee_type_description": "§cMelee weapon",
   "key.dimasrpg.range_type_description": "§aRange weapon",
   "key.dimasrpg.magic_type_description": "§5Magic weapon",
   
+  
+  "attribute.name.melee_damage" : "§cMelee Damage",
+  "attribute.name.range_damage" : "§aRange Damage",
+  "attribute.name.magic_damage" : "§5Magic Damage",
   "attribute.name.melee_armor" : "§cMelee Armor",
   "attribute.name.range_armor" : "§aRange Armor",
   "attribute.name.magic_armor" : "§5Magic Armor"

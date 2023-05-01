@@ -1,5 +1,8 @@
 package com.andrey66.dimasrpg.mixin;
 
+import com.andrey66.dimasrpg.Debug;
+import com.andrey66.dimasrpg.DimasRPG;
+import com.andrey66.dimasrpg.Math.ModCombatRules;
 import com.andrey66.dimasrpg.attribute.ModAttributes;
 import com.andrey66.dimasrpg.config.ConfigWeaponsValues;
 import net.minecraft.ChatFormatting;
@@ -17,6 +20,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,6 +31,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.io.IOException;
 import java.util.Objects;
 
 
@@ -52,17 +58,24 @@ public abstract class MixinLivingEntity extends MixinEntity{
         if (damageSource.getEntity() instanceof LivingEntity){
             Item item = ((LivingEntity) damageSource.getEntity()).getItemInHand(InteractionHand.MAIN_HAND).getItem();
             String itemString = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)).toString();
-            if (!damageSource.is(DamageTypeTags.BYPASSES_ARMOR)) { //TODO: позможно стоит посмотреть на этот метод
+
+            // Проверка типа урона на проникновение через броню
+            if (!damageSource.is(DamageTypeTags.BYPASSES_ARMOR)) {
                 if (ConfigWeaponsValues.exist(itemString)) {
-                    if (Objects.equals(ConfigWeaponsValues.getType(itemString), "melee")) {
-                        this.hurtArmor(damageSource, damage);
-                        damage = CombatRules.getDamageAfterAbsorb(damage, (float)this.getArmorValue(), (float)this.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
-                    } else {
-                        return 0;
+                    switch (Objects.requireNonNull(ConfigWeaponsValues.getType(itemString))) {
+                        case ("melee") -> {
+                            this.hurtArmor(damageSource, damage);
+                            damage = ModCombatRules.getDamageAfterAbsorb(damage, (float) this.getAttributeValue(ModAttributes.MELEE_ARMOR.get()));
+                        }
+                        case ("range") -> {
+                            this.hurtArmor(damageSource, damage);
+                            damage = ModCombatRules.getDamageAfterAbsorb(damage, (float) this.getAttributeValue(ModAttributes.RANGE_ARMOR.get()));
+                        }
+                        case ("magic") -> {
+                            this.hurtArmor(damageSource, damage);
+                            damage = ModCombatRules.getDamageAfterAbsorb(damage, (float) this.getAttributeValue(ModAttributes.MAGIC_DAMAGE.get()));
+                        }
                     }
-                } else {
-                    this.hurtArmor(damageSource, damage);
-                    damage = CombatRules.getDamageAfterAbsorb(damage, (float)this.getArmorValue(), (float)this.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
                 }
             }
         }
@@ -81,37 +94,72 @@ public abstract class MixinLivingEntity extends MixinEntity{
     private static void addAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
         cir.getReturnValue()
                 .add(ModAttributes.MAGIC_ARMOR.get())
-                .add(ModAttributes.DAMAGE_TYPE.get())
                 .add(ModAttributes.MELEE_ARMOR.get())
-                .add(ModAttributes.RANGE_ARMOR.get());
+                .add(ModAttributes.RANGE_ARMOR.get())
+                .add(ModAttributes.MAGIC_DAMAGE.get())
+                .add(ModAttributes.MELEE_DAMAGE.get())
+                .add(ModAttributes.RANGE_DAMAGE.get());
     }
 
     // Метод для изминения вычислений урона
     @Inject(method = "actuallyHurt", at = @At("HEAD"), cancellable = true)
-    private void reCalculateDamage(DamageSource damageSource, float damage, CallbackInfo ci) {
+    private void reCalculateDamage(DamageSource damageSource, float damage, CallbackInfo ci) {//TODO: Учесть логику LivingEntity.hurt()
         if (!this.isInvulnerableTo(damageSource)) {
+            try {
+                if (damageSource.getEntity() != null){
+                    LivingEntity livingEntity = (LivingEntity) damageSource.getEntity();
+                    Item item = livingEntity.getItemInHand(InteractionHand.MAIN_HAND).getItem();
+                    String itemString = (Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item))).toString();
+
+                    // Проверка на существование оружия в конфиге
+                    if (ConfigWeaponsValues.exist(itemString)) {
+                        Debug.printToChat(Objects.requireNonNull(ConfigWeaponsValues.getType(itemString)));
+                        switch (Objects.requireNonNull(ConfigWeaponsValues.getType(itemString))) {
+                            case ("melee") -> {
+                                damage = (float) livingEntity.getAttributeValue(ModAttributes.MELEE_DAMAGE.get());
+                            }
+                            case ("range") -> {
+                                damage = (float) livingEntity.getAttributeValue(ModAttributes.RANGE_DAMAGE.get());
+                            }
+                            case ("magic") -> {
+                                damage = (float) livingEntity.getAttributeValue(ModAttributes.MAGIC_DAMAGE.get());
+                            }
+                        }
+                    } else {
+                        if (item instanceof TieredItem || item instanceof TridentItem) {
+                            Debug.printToChat(itemString + " " + Component.translatable("key.dimasrpg.weapon_alert").getString(), ChatFormatting.YELLOW);
+                        }
+                        damage = (float) this.getAttributeValue(ModAttributes.MELEE_DAMAGE.get());
+                    }
+                }
+            } catch (Exception e) {
+                DimasRPG.LOGGER.warn("ForgeRegistries.ITEMS.getKey(item)) is null.");
+                e.printStackTrace();
+            }
+
+            // Запуск эвента
             damage = net.minecraftforge.common.ForgeHooks.onLivingHurt(this.toLivingEntity(), damageSource, damage);
+
             if (damage <= 0) ci.cancel();
+
+            // Поглощение урона бронёй
             damage = this.getDamageAfterArmorAbsorb(damageSource, damage);
-            //damage = this.getDamageAfterMagicAbsorb(damageSource, damage);
-            float f2 = Math.max(damage - this.getAbsorptionAmount(), 0.0F);
-            this.setAbsorptionAmount(this.getAbsorptionAmount() - (damage - f2));
-            float f = damage - f2;
+
+            // Поглощение урона дополнительным здоровьем
+            float absorptionAmount = Math.max(damage - this.getAbsorptionAmount(), 0.0F);
+            this.setAbsorptionAmount(this.getAbsorptionAmount() - (damage - absorptionAmount));
+            float f = damage - absorptionAmount;
             if (f > 0.0F && f < 3.4028235E37F && damageSource.getEntity() instanceof ServerPlayer) {
                 ((ServerPlayer)damageSource.getEntity()).awardStat(Stats.CUSTOM.get(Stats.DAMAGE_DEALT_ABSORBED), Math.round(f * 10.0F));
             }
 
-            f2 = net.minecraftforge.common.ForgeHooks.onLivingDamage(this.toLivingEntity(), damageSource, f2);
-            if (f2 != 0.0F) {
+            absorptionAmount = net.minecraftforge.common.ForgeHooks.onLivingDamage(this.toLivingEntity(), damageSource, absorptionAmount);
+            if (absorptionAmount != 0.0F) {
                 float f1 = this.getHealth();
-                this.getCombatTracker().recordDamage(damageSource, f1, f2);
-                this.setHealth(f1 - f2); // Forge: moved to fix MC-121048
-                this.setAbsorptionAmount(this.getAbsorptionAmount() - f2);
+                this.getCombatTracker().recordDamage(damageSource, f1, absorptionAmount);
+                this.setHealth(f1 - absorptionAmount); // Forge: moved to fix MC-121048
+                this.setAbsorptionAmount(this.getAbsorptionAmount() - absorptionAmount);
                 this.gameEvent(GameEvent.ENTITY_DAMAGE);
-
-                if (Minecraft.getInstance().player != null)
-                    Minecraft.getInstance().player.sendSystemMessage(
-                            Component.literal(String.valueOf((f1 - f2))).withStyle(ChatFormatting.YELLOW));
             }
         }
         ci.cancel();

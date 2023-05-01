@@ -4,10 +4,14 @@ import com.andrey66.dimasrpg.Debug;
 import com.andrey66.dimasrpg.attribute.ModAttributes;
 import com.andrey66.dimasrpg.config.ConfigArmorValues;
 import com.andrey66.dimasrpg.config.ConfigWeaponsValues;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -40,68 +44,6 @@ public class MixinItem {
         }
         if (!text.equals("")){
             p_41423_.add(Component.literal(text));
-        }
-    }
-
-    @Inject(method = "inventoryTick", at = @At(value = "HEAD"))
-    public void addCustomNbt(ItemStack itemStack, Level level, Entity p_41406_, int p_41407_, boolean p_41408_, CallbackInfo ci) {
-        if (!level.isClientSide()) {
-            CompoundTag root = itemStack.getOrCreateTag();
-            CompoundTag attributes = new CompoundTag();
-            ListTag attributeList = new ListTag();
-            String item_id = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(itemStack.getItem())).toString();
-            if (!root.contains("AttributeModifiers") && ConfigArmorValues.exist(item_id)) {
-                String attributeName = "";
-                String type;
-                boolean changeAttribute = false;
-                double amount;
-                String slot;
-                for (Map.Entry<String, HashMap<String, Float>> slots : Objects.requireNonNull(ConfigArmorValues.getSlots(item_id)).entrySet()) {
-                    slot = slots.getKey();
-                    for (Map.Entry<String, Float> values : Objects.requireNonNull(ConfigArmorValues.getTypes(item_id, slot)).entrySet()){
-                        CompoundTag attribute = new CompoundTag();
-                        type = values.getKey();
-                        amount = values.getValue();
-                        switch (type) {
-                            case ("melee") -> {
-                                attributeName = ModAttributes.MELEE_ARMOR.getId().toString();
-                                changeAttribute = true;
-                            }
-                            case ("range") -> {
-                                attributeName = ModAttributes.RANGE_ARMOR.getId().toString();
-                                changeAttribute = true;
-                            }
-                            case ("magic") -> {
-                                attributeName = ModAttributes.MAGIC_ARMOR.getId().toString();
-                                changeAttribute = true;
-                            }
-                        }
-                        if(changeAttribute){
-                            attribute.putString("AttributeName", attributeName);
-                            attribute.putString("Name", attributeName);
-                            attribute.putDouble("Amount", amount);
-                            UUID uuid = UUID.randomUUID();
-                            long mostSignificantBits = uuid.getMostSignificantBits();
-                            long leastSignificantBits = uuid.getLeastSignificantBits();
-
-                            int[] uuidArray = new int[]{
-                                    (int) (mostSignificantBits >> 32),
-                                    (int) mostSignificantBits,
-                                    (int) (leastSignificantBits >> 32),
-                                    (int) leastSignificantBits
-                            };
-                            attribute.putIntArray("UUID", uuidArray);
-                            attribute.putString("Slot", slot);
-
-                            attributeList.add(attribute);
-
-                        }
-                    }
-
-                }
-                attributes.put("AttributeModifiers", attributeList);
-                itemStack.setTag(attributes);
-            }
         }
     }
 }

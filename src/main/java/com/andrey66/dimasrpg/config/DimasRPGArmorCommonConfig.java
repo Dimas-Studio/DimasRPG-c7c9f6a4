@@ -62,12 +62,12 @@ public class DimasRPGArmorCommonConfig {
 
                 for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
                     String name = entry.getKey();
-                    Type pattern = new TypeToken<Map<String, HashMap<String, Float>>>() {}.getType();
-                    Map<String, HashMap<String, Float>> innerMap = new Gson().fromJson(entry.getValue(), pattern);
-                    for (Map.Entry<String, HashMap<String, Float>> entry1 : innerMap.entrySet()) {
-                        String slot = entry1.getKey();
-                        HashMap<String, Float> values = entry1.getValue();
-                        ConfigArmorValues.put(name, new HashMap<>(){{put(slot, values);}});
+                    Type pattern = new TypeToken<Map<String, Float>>() {}.getType();
+                    Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
+                    for (Map.Entry<String, Float> entry1 : innerMap.entrySet()) {
+                        String type = entry1.getKey();
+                        Float value = entry1.getValue();
+                        ConfigArmorValues.put(name, new HashMap<>(){{put(type, value);}});
                     }
                 }
             }
@@ -89,20 +89,15 @@ public class DimasRPGArmorCommonConfig {
         Arrays.sort(names);
 
         // Общий словарь всего конфига
-        HashMap<String, HashMap<String, HashMap<String, Float>>> items = new HashMap<>();
+        HashMap<String, HashMap<String, Float>> items = new HashMap<>();
 
         for(Object name : names) {
             if(((String) name).matches("\\w+:\\w+")) {    // Провкрка на: "minecraft:creeper"
-                HashMap<String, HashMap<String, Float>> innerMap = new HashMap<>();
-                for (Map.Entry<String, HashMap<String, Float>> entry : Objects.requireNonNull(ConfigArmorValues.getSlots((String) name)).entrySet()) {
-                    String slot = entry.getKey();
-                    HashMap<String, Float> innerMap2 = new HashMap<>();
-                    for (Map.Entry<String, Float> entry1 : Objects.requireNonNull(ConfigArmorValues.getTypes((String) name, slot)).entrySet()){
-                        String type = entry1.getKey();
-                        Float value = entry1.getValue();
-                        innerMap2.put(type, value);
-                    }
-                    innerMap.put(slot, innerMap2);
+                HashMap<String, Float> innerMap = new HashMap<>();
+                for (Map.Entry<String, Float> entry : Objects.requireNonNull(ConfigArmorValues.getTypes((String) name)).entrySet()){
+                    String type = entry.getKey();
+                    Float value = entry.getValue();
+                    innerMap.put(type, value);
                 }
                 items.put((String) name, innerMap);
             }
@@ -135,20 +130,16 @@ public class DimasRPGArmorCommonConfig {
                     return false;
                 }
 
-                Type pattern = new TypeToken<Map<String, HashMap<String, Float>>>() {}.getType();
-                Map<String, HashMap<String, Float>> innerMap = new Gson().fromJson(entry.getValue(), pattern);
-                for (Map.Entry<String, HashMap<String, Float>> entry1 : innerMap.entrySet()) {
-                    String slot = entry1.getKey();
-                    HashMap<String, Float> values = entry1.getValue();
-                    for (Map.Entry<String, Float> entry2 : values.entrySet()) {
-                        String type = entry2.getKey();
-                        Float value = entry2.getValue();
-                        if (type == null || type.isEmpty()) {
-                            return false;
-                        }
-                        if (value < 0) {
-                            return false;
-                        }
+                Type pattern = new TypeToken<Map<String, Float>>() {}.getType();
+                Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
+                for (Map.Entry<String, Float> entry1 : innerMap.entrySet()) {
+                    String type = entry1.getKey();
+                    Float value = entry1.getValue();
+                    if (type == null || type.isEmpty()) {
+                        return false;
+                    }
+                    if (value < 0) {
+                        return false;
                     }
                 }
             } catch (Exception e){

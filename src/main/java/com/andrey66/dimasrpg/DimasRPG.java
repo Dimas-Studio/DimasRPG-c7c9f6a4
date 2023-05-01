@@ -28,8 +28,8 @@ public class DimasRPG
     public DimasRPG() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        ModItems.register(modEventBus); // регистрация предметов
         ModAttributes.register(modEventBus); // регистрация аттрибутов
+        ModItems.register(modEventBus); // регистрация предметов
         modEventBus.addListener(this::commonSetup);
         DimasRPGWeaponsCommonConfig.initConfig(MOD_ID); // регистрация конфигоа оружия
         DimasRPGArmorCommonConfig.initConfig(MOD_ID); // регистрация конфигоа брони

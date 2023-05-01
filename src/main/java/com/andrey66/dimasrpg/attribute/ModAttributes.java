@@ -1,13 +1,14 @@
 package com.andrey66.dimasrpg.attribute;
 
 import com.andrey66.dimasrpg.DimasRPG;
-import com.andrey66.dimasrpg.attribute.custom.DamageTypeAttribute;
-import com.andrey66.dimasrpg.attribute.custom.MagicArmorAttribute;
+import com.andrey66.dimasrpg.attribute.custom.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.HashMap;
 
 // Класс для регистрации новых аттрибутов с особыми свойствами
 public class ModAttributes {
@@ -17,15 +18,20 @@ public class ModAttributes {
             DeferredRegister.create(ForgeRegistries.ATTRIBUTES, DimasRPG.MOD_ID);
 
 
-    // Регистрация аттрибута magic_res
+    // Регистрация аттрибутов
     public static final RegistryObject<Attribute> MELEE_ARMOR = ATTRIBUTES.register("melee_armor",
-            () -> new MagicArmorAttribute("attribute.name.melee_armor", 0.0));
+            () -> new MeleeArmorAttribute("attribute.name.melee_armor", 0.0));
     public static final RegistryObject<Attribute> RANGE_ARMOR = ATTRIBUTES.register("range_armor",
-            () -> new MagicArmorAttribute("attribute.name.range_armor", 0.0));
+            () -> new RangeArmorAttribute("attribute.name.range_armor", 0.0));
     public static final RegistryObject<Attribute> MAGIC_ARMOR = ATTRIBUTES.register("magic_armor",
             () -> new MagicArmorAttribute("attribute.name.magic_armor", 0.0));
-    public static final RegistryObject<Attribute> DAMAGE_TYPE = ATTRIBUTES.register("damage_type",
-            () -> new DamageTypeAttribute("damage_type", DamageTypeAttribute.getTypeFromString("melee")));
+	public static final RegistryObject<Attribute> MELEE_DAMAGE = ATTRIBUTES.register("melee_damage",
+            () -> new MeleeDamageAttribute("attribute.name.melee_damage", 0.0));
+    public static final RegistryObject<Attribute> RANGE_DAMAGE = ATTRIBUTES.register("range_damage",
+            () -> new RangeDamageAttribute("attribute.name.range_damage", 0.0));
+    public static final RegistryObject<Attribute> MAGIC_DAMAGE = ATTRIBUTES.register("magic_damage",
+            () -> new MagicDamageAttribute("attribute.name.magic_damage", 0.0));
+
 
     // Метод-триггер для вызова из главного класса мода
     public static void register(IEventBus eventBus) {

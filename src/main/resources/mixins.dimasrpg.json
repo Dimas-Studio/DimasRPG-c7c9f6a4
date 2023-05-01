@@ -4,10 +4,12 @@
   "package": "com.andrey66.dimasrpg.mixin",
   "refmap": "mixins.dimasrpg.refmap.json",
   "mixins": [
+    "MixinArmorItem",
+    "MixinDiggerItem",
     "MixinEntity",
     "MixinItem",
-    "MixinItemStack",
-    "MixinLivingEntity"
+    "MixinLivingEntity",
+    "MixinSwordItem"
   ],
   "client": [],
   "server": []
