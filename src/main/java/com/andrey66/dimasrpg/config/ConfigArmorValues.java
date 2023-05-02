@@ -50,7 +50,7 @@ public class ConfigArmorValues {
 
 
     // метод пролучения количества защиты предмета
-    public static Float getValue(String name,String type) {
+    public static Float getValue(String name, String type) {
         if(CONFIG_SPEC.containsKey(name)){
             if (CONFIG_SPEC.get(name).containsKey(type)) {
                 return CONFIG_SPEC.get(name).get(type);
