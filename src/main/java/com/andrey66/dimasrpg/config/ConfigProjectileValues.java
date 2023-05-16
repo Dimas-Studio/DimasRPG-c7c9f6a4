@@ -34,7 +34,7 @@ public class ConfigProjectileValues {
             type = keys.iterator().next();
             return type;
         }
-        return null;
+        return "range";
     }
 
 
@@ -46,7 +46,7 @@ public class ConfigProjectileValues {
             type = keys.iterator().next();
             return CONFIG_SPEC.get(name).get(type);
         }
-        return null;
+        return (float) 0;
     }
 
     // Метод получения множества ключей (имён предметов) из конфига

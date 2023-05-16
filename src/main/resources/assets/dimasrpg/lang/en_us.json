@@ -1,6 +1,7 @@
 {
   "item.dimasrpg.essence_checker": "Essence Checker",  
   "key.dimasrpg.weapon_alert": "not in weapons config!",
+  "key.dimasrpg.projectile_alert": "not in projectile config!",
 
 
   "key.dimasrpg.melee_type_description": "§cMelee weapon",
