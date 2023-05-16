@@ -136,7 +136,7 @@ public abstract class MixinLivingEntity extends MixinEntity{
                                     damageType = "magic";
                                 }
                             }
-                        // Урон нанесён в дальнем бою
+                        // Урон нанесён в дальнем бою снарядом из конфига
                         } else if (ConfigProjectileValues.exist(
                                 String.valueOf(Objects.requireNonNull(directEntity).getEncodeId())
                         )){
@@ -181,6 +181,7 @@ public abstract class MixinLivingEntity extends MixinEntity{
                                 bonusDamage = this.getDamageAfterArmorAbsorb(damageSource, projectileDamage, projectileType);
                             }
                         } else {
+                            // Снаряда в конфиге нет
                             String projectileName = directEntity.getEncodeId();
                             Debug.printToChat(projectileName + " " + Component.translatable("key.dimasrpg.projectile_alert").getString(), ChatFormatting.YELLOW);
                             damage = (float) this.getAttributeValue(ModAttributes.RANGE_ARMOR.get());

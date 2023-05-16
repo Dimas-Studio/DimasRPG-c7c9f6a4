@@ -45,7 +45,7 @@ public class MixinItem {
 
 
     private final HashMap<String, ImmutableMultimap<Attribute, AttributeModifier>> defaultModifiers = new HashMap<>();
-    private void addNewAttribute(String itemString) {
+    protected void addNewAttribute(String itemString) {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         if (ConfigWeaponsValues.exist(itemString)) {
             HashMap<String, Attribute> STRING_ARMOR_ATTRIBUTES = new HashMap<>() {{
