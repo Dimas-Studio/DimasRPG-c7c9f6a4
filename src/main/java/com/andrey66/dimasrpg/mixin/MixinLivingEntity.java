@@ -7,26 +7,22 @@ import com.andrey66.dimasrpg.attribute.ModAttributes;
 import com.andrey66.dimasrpg.config.ConfigProjectileValues;
 import com.andrey66.dimasrpg.config.ConfigWeaponsValues;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.damagesource.CombatTracker;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,7 +30,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.io.IOException;
 import java.util.Objects;
 
 
@@ -54,8 +49,6 @@ public abstract class MixinLivingEntity extends MixinEntity{
     protected abstract void hurtArmor(DamageSource p_21122_, float p_21123_);
     @Shadow
     public abstract double getAttributeValue(Attribute p_21134_);
-
-    @Shadow @Final public static int DEATH_DURATION;
 
     public float getMeleeArmorValue() {
         return (float) this.getAttributeValue(ModAttributes.MELEE_ARMOR.get());
