@@ -55,14 +55,7 @@ public class ConfigWeaponsValues {
     public static Set<String> getKeys() {
         return CONFIG_SPEC.keySet();
     }
-/*
-    public static List<String> getNames() {
-        Set<String> keySet = CONFIG_SPEC.keySet();
-        List<String> keys = new ArrayList<>(keySet);
-        Collections.sort(keys);
-        return keys;
-    }
-*/
+
     // Метод проверки ключа (имени) на существование
     public static Boolean exist(String name) {
         return CONFIG_SPEC.containsKey(name);
