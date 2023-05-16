@@ -2,6 +2,7 @@ package com.andrey66.dimasrpg;
 
 import com.andrey66.dimasrpg.attribute.ModAttributes;
 import com.andrey66.dimasrpg.config.DimasRPGArmorCommonConfig;
+import com.andrey66.dimasrpg.config.DimasRPGProjectileCommonConfig;
 import com.andrey66.dimasrpg.config.DimasRPGWeaponsCommonConfig;
 import com.andrey66.dimasrpg.item.ModItems;
 import com.mojang.logging.LogUtils;
@@ -32,8 +33,9 @@ public class DimasRPG
         ModAttributes.register(modEventBus); // регистрация аттрибутов
         ModItems.register(modEventBus); // регистрация предметов
         modEventBus.addListener(this::commonSetup);
-        DimasRPGWeaponsCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER); // регистрация конфигоа оружия
-        DimasRPGArmorCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER); // регистрация конфигоа брони
+        DimasRPGWeaponsCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER); // регистрация конфигов
+        DimasRPGArmorCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
+        DimasRPGProjectileCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
 
