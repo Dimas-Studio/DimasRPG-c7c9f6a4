@@ -15,8 +15,6 @@ import java.util.Objects;
 
 // Класс для работы с файлом конфига брони
 public class DimasRPGArmorCommonConfig {
-    // Переменная для хранения пути к файлу конфига
-    private static File file;
 
     // Gson переменная для конвертации словаря в json строку и наоборот
     public static final Gson GSON = new GsonBuilder()
@@ -24,16 +22,26 @@ public class DimasRPGArmorCommonConfig {
             .setPrettyPrinting().create();
 
     // Инициализация конфига (вызывается из основного класса мода)
-    public static void initConfig(String mod_id) {
+    public static void initConfig(String mod_id, String config_folder) {
 
         // Установка базовых значений конфига
         ConfigArmorValues.setDefaultConfigValues();
 
         // Получение пути дирректории хранения конфигов
-        // TODO: Добавить папку для конфигов мода
         Path configDir = FMLPaths.CONFIGDIR.get();
-        file = configDir.resolve(mod_id + "-armor-common.json").toFile();
+        Path folderPath = configDir.resolve(config_folder);
+        File folder = folderPath.toFile();
 
+        // Проверяем, существует ли папка, и создаем ее, если необходимо
+        if (!folder.exists()) {
+            if (folder.mkdirs()) {
+                DimasRPG.LOGGER.info("Folder " + config_folder + " created successfully!");
+            } else {
+                DimasRPG.LOGGER.error("Failed to create folder " + config_folder);
+            }
+        }
+
+        File file = folderPath.resolve(mod_id + "-armor-common.json").toFile();
         if(!file.exists()) {
             // Конфиг файл не найден, создаём новый с значениями по умолчанию
             DimasRPG.LOGGER.info("Could not find armor config, generating new default config.");
