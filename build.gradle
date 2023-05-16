@@ -18,7 +18,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '0.0.6-1.19'
+version = '0.0.7-1.19'
 group = 'com.andrey66.dimasrpg'
 archivesBaseName = 'dimasrpg'
 
