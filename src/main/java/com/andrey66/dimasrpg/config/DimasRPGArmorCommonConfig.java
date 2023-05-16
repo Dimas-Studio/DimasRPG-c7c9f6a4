@@ -45,17 +45,17 @@ public class DimasRPGArmorCommonConfig {
         if(!file.exists()) {
             // Конфиг файл не найден, создаём новый с значениями по умолчанию
             DimasRPG.LOGGER.info("Could not find armor config, generating new default config.");
-            saveConfig();
+            saveConfig(file);
         }
         else {
             // Конфиг файл найден, начинаем чтение
             DimasRPG.LOGGER.info("Reading config armor values from file.");
-            readConfig();
+            readConfig(file);
         }
     }
 
     // Метод чтения конфигов из файла
-    private static void readConfig() {
+    private static void readConfig(File file) {
         try {
             // Переменная для чтения файла
             BufferedReader reader =  new BufferedReader(new FileReader(file));
@@ -90,7 +90,7 @@ public class DimasRPGArmorCommonConfig {
     }
 
     // Метод сохранения файла с конфигами по умолчанию
-    private static void saveConfig() {
+    private static void saveConfig(File file) {
 
         // Сортировка переменных по умолчанию для удобства чтения
         Object[] names = ConfigArmorValues.getKeys().toArray();
