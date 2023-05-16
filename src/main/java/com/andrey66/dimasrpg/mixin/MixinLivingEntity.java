@@ -185,7 +185,6 @@ public abstract class MixinLivingEntity extends MixinEntity{
                             Debug.printToChat(projectileName + " " + Component.translatable("key.dimasrpg.projectile_alert").getString(), ChatFormatting.YELLOW);
                             damage = (float) this.getAttributeValue(ModAttributes.RANGE_ARMOR.get());
                             damageType = "range";
-                            Debug.printToChat(ConfigProjectileValues.getKeys().toString());
                         }
                     } else {
                         if (item instanceof TieredItem || item instanceof TridentItem) {
