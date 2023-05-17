@@ -4,10 +4,7 @@ import com.andrey66.dimasrpg.Debug;
 import com.andrey66.dimasrpg.DimasRPG;
 import com.andrey66.dimasrpg.Math.ModCombatRules;
 import com.andrey66.dimasrpg.attribute.ModAttributes;
-import com.andrey66.dimasrpg.config.ConfigEntityArmorValues;
-import com.andrey66.dimasrpg.config.ConfigMobDamageValues;
-import com.andrey66.dimasrpg.config.ConfigProjectileValues;
-import com.andrey66.dimasrpg.config.ConfigWeaponsValues;
+import com.andrey66.dimasrpg.config.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -146,6 +143,16 @@ public abstract class MixinLivingEntity extends MixinEntity{
                         entityMeleeArmorBonus = ConfigEntityArmorValues.getValue("player", "melee");
                         entityRangeArmorBonus = ConfigEntityArmorValues.getValue("player", "range");
                         entityMagicArmorBonus = ConfigEntityArmorValues.getValue("player", "magic");
+                    }
+                    if (entity instanceof Mob) {
+                        entityMeleeDamageBonus = ConfigEntityDamageValues.getValue(livingEntity_this.getEncodeId(), "melee");
+                        entityRangeDamageBonus = ConfigEntityDamageValues.getValue(livingEntity_this.getEncodeId(), "range");
+                        entityMagicDamageBonus = ConfigEntityDamageValues.getValue(livingEntity_this.getEncodeId(), "magic");
+                    }
+                    if (entity instanceof Player) {
+                        entityMeleeDamageBonus = ConfigEntityDamageValues.getValue("player", "melee");
+                        entityRangeDamageBonus = ConfigEntityDamageValues.getValue("player", "range");
+                        entityMagicDamageBonus = ConfigEntityDamageValues.getValue("player", "magic");
                     }
 
                     Item item = livingEntity.getItemInHand(InteractionHand.MAIN_HAND).getItem(); // TODO: Проверить на существах без рук

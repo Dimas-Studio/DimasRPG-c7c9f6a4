@@ -36,6 +36,7 @@ public class DimasRPG
         DimasRPGProjectileCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
         DimasRPGMobDamageCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
         DimasRPGEntityProtectionCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
+        DimasRPGEntityDamageCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
 
