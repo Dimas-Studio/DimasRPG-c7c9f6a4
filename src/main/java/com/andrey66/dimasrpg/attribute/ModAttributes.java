@@ -28,9 +28,9 @@ public class ModAttributes {
 	public static final RegistryObject<Attribute> MELEE_DAMAGE = ATTRIBUTES.register("melee_damage",
             () -> new MeleeDamageAttribute("attribute.name.melee_damage", 1.0));
     public static final RegistryObject<Attribute> RANGE_DAMAGE = ATTRIBUTES.register("range_damage",
-            () -> new RangeDamageAttribute("attribute.name.range_damage", 1.0));
+            () -> new RangeDamageAttribute("attribute.name.range_damage", 0.0));
     public static final RegistryObject<Attribute> MAGIC_DAMAGE = ATTRIBUTES.register("magic_damage",
-            () -> new MagicDamageAttribute("attribute.name.magic_damage", 1.0));
+            () -> new MagicDamageAttribute("attribute.name.magic_damage", 0.0));
 
 
     // Метод-триггер для вызова из главного класса мода
