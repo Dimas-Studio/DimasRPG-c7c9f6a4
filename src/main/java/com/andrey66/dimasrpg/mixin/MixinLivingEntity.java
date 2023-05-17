@@ -25,6 +25,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -88,6 +89,10 @@ public abstract class MixinLivingEntity extends MixinEntity{
     @Shadow
     protected void playHurtSound(DamageSource p_21160_) { }
 
+    @Shadow protected abstract void blockedByShield(LivingEntity p_21246_);
+
+    @Shadow protected abstract void triggerItemUseEffects(ItemStack p_21138_, int p_21139_);
+
     public float getMeleeArmorValue() {
         return (float) this.getAttributeValue(ModAttributes.MELEE_ARMOR.get());
     }
@@ -97,6 +102,7 @@ public abstract class MixinLivingEntity extends MixinEntity{
     public float getMagicArmorValue() {
         return (float) this.getAttributeValue(ModAttributes.MAGIC_ARMOR.get());
     }
+    private boolean blockedDamage = false;
 
     protected float getDamageAfterArmorAbsorb(DamageSource damageSource, float damage, String damageType, float attribute_defence) {
         if (damageSource.getEntity() instanceof LivingEntity){
@@ -145,6 +151,7 @@ public abstract class MixinLivingEntity extends MixinEntity{
     protected void reCalculateDamage(DamageSource damageSource, float damage, CallbackInfo ci) { // TODO: Учесть логику LivingEntity.hurt()
         if (!this.isInvulnerableTo(damageSource)) {
             int a = Debug.a();
+            float vanilaDamage = 0;
             Entity entity = damageSource.getEntity();
             Entity directEntity = damageSource.getDirectEntity();
             String weaponDamageType = "melee";
@@ -159,102 +166,112 @@ public abstract class MixinLivingEntity extends MixinEntity{
             float entityMeleeArmorBonus = 0;
             float entityRangeArmorBonus = 0;
             float entityMagicArmorBonus = 0;
+            float meleeDamage = 0;
+            float rangeDamage = 0;
+            float magicDamage = 0;
+            boolean uniqueDamage = false;
             boolean haveDistance = !Objects.equals(entity, directEntity);
 
+            if (damageSource.is(DamageTypeTags.IS_EXPLOSION)) {
+                uniqueDamage = true;
+                meleeDamage = damage;
+            }
+
             try {
-                if (entity != null){
-                    LivingEntity livingEntity = (LivingEntity) entity;
-                    LivingEntity livingEntity_this = (LivingEntity) (Object) this;
+                Debug.printToChat(damageSource.toString());
+                if (!uniqueDamage) {
+                    if (entity != null) {
+                        LivingEntity livingEntity = (LivingEntity) entity;
+                        LivingEntity livingEntity_this = (LivingEntity) (Object) this;
 
-                    if (entity instanceof Mob && ConfigMobDamageValues.exist(entity.getEncodeId())) {
-                        String mobName = entity.getEncodeId();
-                        mobDamageType = ConfigMobDamageValues.getType(mobName);
-                        mobDamage = Objects.requireNonNull(ConfigMobDamageValues.getValue(mobName));
-                    }
-                    if (livingEntity_this instanceof Mob) {
-                        entityMeleeArmorBonus = ConfigEntityArmorValues.getValue(livingEntity_this.getEncodeId(), "melee");
-                        entityRangeArmorBonus = ConfigEntityArmorValues.getValue(livingEntity_this.getEncodeId(), "range");
-                        entityMagicArmorBonus = ConfigEntityArmorValues.getValue(livingEntity_this.getEncodeId(), "magic");
-                    }
-                    if (livingEntity_this instanceof Player) {
-                        entityMeleeArmorBonus = ConfigEntityArmorValues.getValue("player", "melee");
-                        entityRangeArmorBonus = ConfigEntityArmorValues.getValue("player", "range");
-                        entityMagicArmorBonus = ConfigEntityArmorValues.getValue("player", "magic");
-                    }
-                    if (entity instanceof Mob) {
-                        entityMeleeDamageBonus = ConfigEntityDamageValues.getValue(livingEntity_this.getEncodeId(), "melee");
-                        entityRangeDamageBonus = ConfigEntityDamageValues.getValue(livingEntity_this.getEncodeId(), "range");
-                        entityMagicDamageBonus = ConfigEntityDamageValues.getValue(livingEntity_this.getEncodeId(), "magic");
-                    }
-                    if (entity instanceof Player) {
-                        entityMeleeDamageBonus = ConfigEntityDamageValues.getValue("player", "melee");
-                        entityRangeDamageBonus = ConfigEntityDamageValues.getValue("player", "range");
-                        entityMagicDamageBonus = ConfigEntityDamageValues.getValue("player", "magic");
-                    }
+                        if (entity instanceof Mob && ConfigMobDamageValues.exist(entity.getEncodeId())) {
+                            String mobName = entity.getEncodeId();
+                            mobDamageType = ConfigMobDamageValues.getType(mobName);
+                            mobDamage = Objects.requireNonNull(ConfigMobDamageValues.getValue(mobName));
+                        }
+                        if (livingEntity_this instanceof Mob) {
+                            entityMeleeArmorBonus = ConfigEntityArmorValues.getValue(livingEntity_this.getEncodeId(), "melee");
+                            entityRangeArmorBonus = ConfigEntityArmorValues.getValue(livingEntity_this.getEncodeId(), "range");
+                            entityMagicArmorBonus = ConfigEntityArmorValues.getValue(livingEntity_this.getEncodeId(), "magic");
+                        }
+                        if (livingEntity_this instanceof Player) {
+                            entityMeleeArmorBonus = ConfigEntityArmorValues.getValue("player", "melee");
+                            entityRangeArmorBonus = ConfigEntityArmorValues.getValue("player", "range");
+                            entityMagicArmorBonus = ConfigEntityArmorValues.getValue("player", "magic");
+                        }
+                        if (entity instanceof Mob) {
+                            entityMeleeDamageBonus = ConfigEntityDamageValues.getValue(livingEntity_this.getEncodeId(), "melee");
+                            entityRangeDamageBonus = ConfigEntityDamageValues.getValue(livingEntity_this.getEncodeId(), "range");
+                            entityMagicDamageBonus = ConfigEntityDamageValues.getValue(livingEntity_this.getEncodeId(), "magic");
+                        }
+                        if (entity instanceof Player) {
+                            entityMeleeDamageBonus = ConfigEntityDamageValues.getValue("player", "melee");
+                            entityRangeDamageBonus = ConfigEntityDamageValues.getValue("player", "range");
+                            entityMagicDamageBonus = ConfigEntityDamageValues.getValue("player", "magic");
+                        }
 
-                    Item item = livingEntity.getItemInHand(InteractionHand.MAIN_HAND).getItem(); // TODO: Проверить на существах без рук
+                        Item item = livingEntity.getItemInHand(InteractionHand.MAIN_HAND).getItem();
 
-                    String itemString = (Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item))).toString();
-                    // Проверка на существование оружия в конфиге
-                    if (ConfigWeaponsValues.exist(itemString)) {
-                        // Урон нанесён в ближнем бою
-                        if (!haveDistance) {
-                            switch (Objects.requireNonNull(ConfigWeaponsValues.getType(itemString))) {
-                                case ("melee"), ("range") -> {
-                                    weaponDamage = (float) livingEntity.getAttributeValue(ModAttributes.MELEE_DAMAGE.get());
-                                    weaponDamageType = "melee";
+                        String itemString = (Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item))).toString();
+                        // Проверка на существование оружия в конфиге
+                        if (ConfigWeaponsValues.exist(itemString)) {
+                            // Урон нанесён в ближнем бою
+                            if (!haveDistance) {
+                                switch (Objects.requireNonNull(ConfigWeaponsValues.getType(itemString))) {
+                                    case ("melee"), ("range") -> {
+                                        weaponDamage = (float) livingEntity.getAttributeValue(ModAttributes.MELEE_DAMAGE.get());
+                                        weaponDamageType = "melee";
+                                    }
+                                    case ("magic") -> {
+                                        weaponDamage = (float) livingEntity.getAttributeValue(ModAttributes.MAGIC_DAMAGE.get());
+                                        weaponDamageType = "magic";
+                                    }
                                 }
-                                case ("magic") -> {
-                                    weaponDamage = (float) livingEntity.getAttributeValue(ModAttributes.MAGIC_DAMAGE.get());
-                                    weaponDamageType = "magic";
+                                // Урон нанесён в дальнем бою снарядом из конфига
+                            } else if (ConfigProjectileValues.exist(
+                                    String.valueOf(Objects.requireNonNull(directEntity).getEncodeId())
+                            )) {
+                                weaponDamage = 0;
+                                weaponDamageType = ConfigWeaponsValues.getType(itemString);
+                                String projectileName = Objects.requireNonNull(directEntity).getEncodeId();
+                                projectileDamageType = ConfigProjectileValues.getType(projectileName);
+                                projectileDamage = ConfigProjectileValues.getValue(projectileName);
+                                switch (Objects.requireNonNull(weaponDamageType)) {
+                                    case ("melee") -> {
+                                        weaponDamage += (float) livingEntity.getAttributeValue(ModAttributes.MELEE_DAMAGE.get());
+                                        weaponDamageType = "melee";
+                                    }
+                                    case ("range") -> {
+                                        weaponDamage += (float) livingEntity.getAttributeValue(ModAttributes.RANGE_DAMAGE.get());
+                                        weaponDamageType = "range";
+                                    }
+                                    case ("magic") -> {
+                                        weaponDamage += (float) livingEntity.getAttributeValue(ModAttributes.MAGIC_DAMAGE.get());
+                                        weaponDamageType = "magic";
+                                    }
                                 }
-                            }
-                        // Урон нанесён в дальнем бою снарядом из конфига
-                        } else if (ConfigProjectileValues.exist(
-                                String.valueOf(Objects.requireNonNull(directEntity).getEncodeId())
-                        )){
-                            weaponDamage = 0;
-                            weaponDamageType = ConfigWeaponsValues.getType(itemString);
-                            String projectileName = Objects.requireNonNull(directEntity).getEncodeId();
-                            projectileDamageType = ConfigProjectileValues.getType(projectileName);
-                            projectileDamage = ConfigProjectileValues.getValue(projectileName);
-                            switch (Objects.requireNonNull(weaponDamageType)) {
-                                case ("melee") -> {
-                                    weaponDamage += (float) livingEntity.getAttributeValue(ModAttributes.MELEE_DAMAGE.get());
-                                    weaponDamageType = "melee";
-                                }
-                                case ("range") -> {
-                                    weaponDamage += (float) livingEntity.getAttributeValue(ModAttributes.RANGE_DAMAGE.get());
-                                    weaponDamageType = "range";
-                                }
-                                case ("magic") -> {
-                                    weaponDamage += (float) livingEntity.getAttributeValue(ModAttributes.MAGIC_DAMAGE.get());
-                                    weaponDamageType = "magic";
-                                }
+                            } else {
+                                // Снаряда в конфиге нет
+                                String projectileName = directEntity.getEncodeId();
+                                Debug.printToChat(projectileName + " " + Component.translatable("key.dimasrpg.projectile_alert").getString(), ChatFormatting.YELLOW);
+                                weaponDamage = (float) this.getAttributeValue(ModAttributes.RANGE_DAMAGE.get());
+                                weaponDamageType = "range";
                             }
                         } else {
-                            // Снаряда в конфиге нет
-                            String projectileName = directEntity.getEncodeId();
-                            Debug.printToChat(projectileName + " " + Component.translatable("key.dimasrpg.projectile_alert").getString(), ChatFormatting.YELLOW);
-                            weaponDamage = (float) this.getAttributeValue(ModAttributes.RANGE_DAMAGE.get());
-                            weaponDamageType = "range";
+                            if (item instanceof TieredItem || item instanceof TridentItem) {
+                                Debug.printToChat(itemString + " " + Component.translatable("key.dimasrpg.weapon_alert").getString(), ChatFormatting.YELLOW);
+                            }
+                            weaponDamage = (float) this.getAttributeValue(ModAttributes.MELEE_DAMAGE.get());
+                            weaponDamageType = "melee";
                         }
                     } else {
-                        if (item instanceof TieredItem || item instanceof TridentItem) {
-                            Debug.printToChat(itemString + " " + Component.translatable("key.dimasrpg.weapon_alert").getString(), ChatFormatting.YELLOW);
-                        }
-                        weaponDamage = (float) this.getAttributeValue(ModAttributes.MELEE_DAMAGE.get());
-                        weaponDamageType = "melee";
+                        vanilaDamage += damage;
                     }
                 }
             } catch (Exception e) {
                 DimasRPG.LOGGER.warn("ForgeRegistries.ITEMS.getKey(item)) is null.");
                 e.printStackTrace();
             }
-
-            float meleeDamage = 0;
-            float rangeDamage = 0;
-            float magicDamage = 0;
 
             meleeDamage += Objects.equals(weaponDamageType, "melee") ? weaponDamage : 0;
             meleeDamage += Objects.equals(mobDamageType, "melee") ? mobDamage : 0;
@@ -274,6 +291,12 @@ public abstract class MixinLivingEntity extends MixinEntity{
             Debug.printToChat("Снаряд [" + projectileDamageType + "]: " + projectileDamage);
             Debug.printToChat("Моб [" + mobDamageType + "]: " + mobDamage);
 
+            if (this.blockedDamage){
+                rangeDamage = 0;
+                meleeDamage *= 0.5;
+                magicDamage *= 0.9;
+            }
+
             meleeDamage = this.getDamageAfterArmorAbsorb(damageSource, meleeDamage, "melee", entityMeleeArmorBonus);
             rangeDamage = this.getDamageAfterArmorAbsorb(damageSource, rangeDamage, "range", entityRangeArmorBonus);
             magicDamage = this.getDamageAfterArmorAbsorb(damageSource, magicDamage, "magic", entityMagicArmorBonus);
@@ -281,8 +304,11 @@ public abstract class MixinLivingEntity extends MixinEntity{
             Debug.printToChat("Melee: " + meleeDamage);
             Debug.printToChat("Range: " + rangeDamage);
             Debug.printToChat("Magic: " + magicDamage);
+            Debug.printToChat("Vanila: " + vanilaDamage);
 
-            damage = meleeDamage + rangeDamage + magicDamage;
+            damage = meleeDamage + rangeDamage + magicDamage + vanilaDamage;
+
+            this.blockedDamage = true;
 
             // Запуск эвента
             damage = net.minecraftforge.common.ForgeHooks.onLivingHurt(this.toLivingEntity(), damageSource, damage);
@@ -322,6 +348,8 @@ public abstract class MixinLivingEntity extends MixinEntity{
         } else if (p_21016_.is(DamageTypeTags.IS_FIRE) && livingEntity.hasEffect(MobEffects.FIRE_RESISTANCE)) {
             cir.setReturnValue(false);
         } else {
+            int a = Debug.a();
+
             if (livingEntity.isSleeping() && !livingEntity.level.isClientSide) {
                 livingEntity.stopSleeping();
             }
@@ -335,7 +363,7 @@ public abstract class MixinLivingEntity extends MixinEntity{
                 if(!ev.isCanceled()) {
                     if(ev.shieldTakesDamage()) this.hurtCurrentlyUsedShield(p_21017_);
                     f1 = ev.getBlockedDamage();
-                    Debug.printToChat("Shield!");
+                    this.blockedDamage = true;
                     p_21017_ -= ev.getBlockedDamage();
                     if (!p_21016_.is(DamageTypeTags.IS_PROJECTILE)) {
                         Entity entity = p_21016_.getDirectEntity();
