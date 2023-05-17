@@ -1,9 +1,7 @@
 package com.andrey66.dimasrpg;
 
 import com.andrey66.dimasrpg.attribute.ModAttributes;
-import com.andrey66.dimasrpg.config.DimasRPGArmorCommonConfig;
-import com.andrey66.dimasrpg.config.DimasRPGProjectileCommonConfig;
-import com.andrey66.dimasrpg.config.DimasRPGWeaponsCommonConfig;
+import com.andrey66.dimasrpg.config.*;
 import com.andrey66.dimasrpg.item.ModItems;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -36,6 +34,9 @@ public class DimasRPG
         DimasRPGWeaponsCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER); // регистрация конфигов
         DimasRPGArmorCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
         DimasRPGProjectileCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
+        DimasRPGMobDamageCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
+        DimasRPGEntityProtectionCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
+        DimasRPGEntityDamageCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
 
