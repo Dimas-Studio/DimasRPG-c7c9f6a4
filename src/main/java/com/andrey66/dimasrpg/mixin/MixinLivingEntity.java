@@ -4,6 +4,7 @@ import com.andrey66.dimasrpg.Debug;
 import com.andrey66.dimasrpg.DimasRPG;
 import com.andrey66.dimasrpg.Math.ModCombatRules;
 import com.andrey66.dimasrpg.attribute.ModAttributes;
+import com.andrey66.dimasrpg.config.ConfigMobDamageValues;
 import com.andrey66.dimasrpg.config.ConfigProjectileValues;
 import com.andrey66.dimasrpg.config.ConfigWeaponsValues;
 import net.minecraft.ChatFormatting;
@@ -123,9 +124,10 @@ public abstract class MixinLivingEntity extends MixinEntity{
             Entity directEntity = damageSource.getDirectEntity();
             boolean haveDistance = !Objects.equals(entity, directEntity);
 
-            if (entity instanceof Mob) {
-                mobDamageType = "melee";
-                mobDamage = 1;
+            if (entity instanceof Mob && ConfigMobDamageValues.exist(entity.getEncodeId())) {
+                String mobName = entity.getEncodeId();
+                mobDamageType = ConfigMobDamageValues.getType(mobName);
+                mobDamage = Objects.requireNonNull(ConfigMobDamageValues.getValue(mobName));
             }
 
             try {
@@ -239,14 +241,6 @@ public abstract class MixinLivingEntity extends MixinEntity{
             }
         }
         ci.cancel();
-    }
-
-
-    public float getMobDamage (Mob mob){
-        if ("minecraft:zombie" == mob.getEncodeId()){
-            return 1;
-        }
-        return 0;
     }
 }
 
