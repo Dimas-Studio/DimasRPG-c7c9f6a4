@@ -4,6 +4,7 @@ import com.andrey66.dimasrpg.Debug;
 import com.andrey66.dimasrpg.DimasRPG;
 import com.andrey66.dimasrpg.Math.ModCombatRules;
 import com.andrey66.dimasrpg.attribute.ModAttributes;
+import com.andrey66.dimasrpg.config.ConfigEntityArmorValues;
 import com.andrey66.dimasrpg.config.ConfigMobDamageValues;
 import com.andrey66.dimasrpg.config.ConfigProjectileValues;
 import com.andrey66.dimasrpg.config.ConfigWeaponsValues;
@@ -16,10 +17,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.CombatTracker;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.TridentItem;
@@ -108,6 +111,9 @@ public abstract class MixinLivingEntity extends MixinEntity{
     @Inject(method = "actuallyHurt", at = @At("HEAD"), cancellable = true)
     protected void reCalculateDamage(DamageSource damageSource, float damage, CallbackInfo ci) { // TODO: Учесть логику LivingEntity.hurt()
         if (!this.isInvulnerableTo(damageSource)) {
+            int a = Debug.a();
+            Entity entity = damageSource.getEntity();
+            Entity directEntity = damageSource.getDirectEntity();
             String weaponDamageType = "melee";
             String projectileDamageType = "";
             String mobDamageType = "";
@@ -120,19 +126,29 @@ public abstract class MixinLivingEntity extends MixinEntity{
             float entityMeleeArmorBonus = 0;
             float entityRangeArmorBonus = 0;
             float entityMagicArmorBonus = 0;
-            Entity entity = damageSource.getEntity();
-            Entity directEntity = damageSource.getDirectEntity();
             boolean haveDistance = !Objects.equals(entity, directEntity);
-
-            if (entity instanceof Mob && ConfigMobDamageValues.exist(entity.getEncodeId())) {
-                String mobName = entity.getEncodeId();
-                mobDamageType = ConfigMobDamageValues.getType(mobName);
-                mobDamage = Objects.requireNonNull(ConfigMobDamageValues.getValue(mobName));
-            }
 
             try {
                 if (entity != null){
                     LivingEntity livingEntity = (LivingEntity) entity;
+                    LivingEntity livingEntity_this = (LivingEntity) (Object) this;
+
+                    if (entity instanceof Mob && ConfigMobDamageValues.exist(entity.getEncodeId())) {
+                        String mobName = entity.getEncodeId();
+                        mobDamageType = ConfigMobDamageValues.getType(mobName);
+                        mobDamage = Objects.requireNonNull(ConfigMobDamageValues.getValue(mobName));
+                    }
+                    if (livingEntity_this instanceof Mob) {
+                        entityMeleeArmorBonus = ConfigEntityArmorValues.getValue(livingEntity_this.getEncodeId(), "melee");
+                        entityRangeArmorBonus = ConfigEntityArmorValues.getValue(livingEntity_this.getEncodeId(), "range");
+                        entityMagicArmorBonus = ConfigEntityArmorValues.getValue(livingEntity_this.getEncodeId(), "magic");
+                    }
+                    if (livingEntity_this instanceof Player) {
+                        entityMeleeArmorBonus = ConfigEntityArmorValues.getValue("player", "melee");
+                        entityRangeArmorBonus = ConfigEntityArmorValues.getValue("player", "range");
+                        entityMagicArmorBonus = ConfigEntityArmorValues.getValue("player", "magic");
+                    }
+
                     Item item = livingEntity.getItemInHand(InteractionHand.MAIN_HAND).getItem(); // TODO: Проверить на существах без рук
 
                     String itemString = (Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item))).toString();
@@ -207,14 +223,21 @@ public abstract class MixinLivingEntity extends MixinEntity{
             magicDamage += Objects.equals(mobDamageType, "magic") ? mobDamage : 0;
             magicDamage += Objects.equals(projectileDamageType, "magic") ? projectileDamage : 0;
 
+            meleeDamage *= (1 + (entityMeleeDamageBonus/100));
+            rangeDamage *= (1 + (entityRangeDamageBonus/100));
+            magicDamage *= (1 + (entityMagicDamageBonus/100));
+
             Debug.printToChat("Оружие [" + weaponDamageType + "]: " + weaponDamage);
             Debug.printToChat("Снаряд [" + projectileDamageType + "]: " + projectileDamage);
             Debug.printToChat("Моб [" + mobDamageType + "]: " + mobDamage);
 
-
             meleeDamage = this.getDamageAfterArmorAbsorb(damageSource, meleeDamage, "melee", entityMeleeArmorBonus);
             rangeDamage = this.getDamageAfterArmorAbsorb(damageSource, rangeDamage, "range", entityRangeArmorBonus);
             magicDamage = this.getDamageAfterArmorAbsorb(damageSource, magicDamage, "magic", entityMagicArmorBonus);
+
+            Debug.printToChat("Melee: " + meleeDamage);
+            Debug.printToChat("Range: " + rangeDamage);
+            Debug.printToChat("Magic: " + magicDamage);
 
             damage = meleeDamage + rangeDamage + magicDamage;
 

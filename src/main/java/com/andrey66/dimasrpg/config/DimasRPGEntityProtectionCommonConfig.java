@@ -134,7 +134,7 @@ public class DimasRPGEntityProtectionCommonConfig {
                 if (name == null || name.isEmpty()) {
                     return false;
                 }
-                if (!name.matches("^[a-z0-9_-]+:[a-z0-9+_-]+$") || name.equals("player")) {
+                if (!(name.matches("^[a-z0-9_-]+:[a-z0-9+_-]+$") || name.equals("player"))) {
                     return false;
                 }
 
@@ -144,9 +144,6 @@ public class DimasRPGEntityProtectionCommonConfig {
                     String type = entry1.getKey();
                     Float value = entry1.getValue();
                     if (type == null || type.isEmpty()) {
-                        return false;
-                    }
-                    if (value < 0) {
                         return false;
                     }
                 }
