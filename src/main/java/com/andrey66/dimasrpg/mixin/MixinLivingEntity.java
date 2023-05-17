@@ -171,6 +171,7 @@ public abstract class MixinLivingEntity extends MixinEntity{
             float rangeDamage = 0;
             float magicDamage = 0;
             float adminDamage = 0;
+
             boolean uniqueDamage = false;
             boolean haveDistance = !Objects.equals(entity, directEntity);
 
@@ -314,7 +315,6 @@ public abstract class MixinLivingEntity extends MixinEntity{
             Debug.printToChat("Magic: " + magicDamage);
             Debug.printToChat("Vanila: " + vanilaDamage);
             Debug.printToChat("Admin: " + adminDamage);
-
             damage = meleeDamage + rangeDamage + magicDamage + vanilaDamage + adminDamage;
 
             this.blockedDamage = true;
