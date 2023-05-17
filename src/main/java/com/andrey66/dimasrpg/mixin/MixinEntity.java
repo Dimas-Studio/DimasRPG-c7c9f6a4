@@ -15,5 +15,7 @@ public abstract class MixinEntity {
     public abstract boolean isInvulnerableTo(DamageSource p_20122_);
     @Shadow
     public abstract void gameEvent(GameEvent p_146851_);
+    @Shadow
+    protected void markHurt() { }
 
 }
