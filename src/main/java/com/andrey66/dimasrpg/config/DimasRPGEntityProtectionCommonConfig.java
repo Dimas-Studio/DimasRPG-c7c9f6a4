@@ -100,7 +100,7 @@ public class DimasRPGEntityProtectionCommonConfig {
         HashMap<String, HashMap<String, Float>> items = new HashMap<>();
 
         for(Object name : names) {
-            if(((String) name).matches("\\w+:\\w+") || (((String) name).equals("player"))) {    // Провкрка на: "minecraft:creeper"
+            if(((String) name).matches("\\w+:\\w+") || (name.equals("player"))) {    // Провкрка на: "minecraft:creeper"
                 HashMap<String, Float> innerMap = new HashMap<>();
                 for (Map.Entry<String, Float> entry : Objects.requireNonNull(ConfigEntityArmorValues.getTypes((String) name)).entrySet()){
                     String type = entry.getKey();
@@ -142,7 +142,6 @@ public class DimasRPGEntityProtectionCommonConfig {
                 Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
                 for (Map.Entry<String, Float> entry1 : innerMap.entrySet()) {
                     String type = entry1.getKey();
-                    Float value = entry1.getValue();
                     if (type == null || type.isEmpty()) {
                         return false;
                     }
