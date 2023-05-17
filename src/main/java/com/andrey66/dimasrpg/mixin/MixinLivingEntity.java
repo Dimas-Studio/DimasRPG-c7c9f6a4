@@ -6,14 +6,19 @@ import com.andrey66.dimasrpg.Math.ModCombatRules;
 import com.andrey66.dimasrpg.attribute.ModAttributes;
 import com.andrey66.dimasrpg.config.*;
 import net.minecraft.ChatFormatting;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.CombatTracker;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -50,6 +55,38 @@ public abstract class MixinLivingEntity extends MixinEntity{
     protected abstract void hurtArmor(DamageSource p_21122_, float p_21123_);
     @Shadow
     public abstract double getAttributeValue(Attribute p_21134_);
+    @Shadow
+    protected void hurtCurrentlyUsedShield(float p_21316_) {}
+    @Shadow
+    protected void blockUsingShield(LivingEntity p_21200_) {}
+    @Shadow
+    protected float lastHurt;
+    @Shadow
+    protected void actuallyHurt(DamageSource p_21240_, float p_21241_) {}
+    @Shadow
+    protected void hurtHelmet(DamageSource p_147213_, float p_147214_) {}
+    @Shadow
+    protected Player lastHurtByPlayer;
+    @Shadow
+    protected int lastHurtByPlayerTime;
+    @Shadow
+    private DamageSource lastDamageSource;
+    @Shadow
+    private long lastDamageStamp;
+    @Shadow
+    private boolean checkTotemDeathProtection(DamageSource p_21263_) {
+        throw new AssertionError();
+    }
+    @Shadow
+    protected SoundEvent getDeathSound() {
+        throw new AssertionError();
+    }
+    @Shadow
+    protected float getSoundVolume() {
+        throw new AssertionError();
+    }
+    @Shadow
+    protected void playHurtSound(DamageSource p_21160_) { }
 
     public float getMeleeArmorValue() {
         return (float) this.getAttributeValue(ModAttributes.MELEE_ARMOR.get());
@@ -270,6 +307,160 @@ public abstract class MixinLivingEntity extends MixinEntity{
             }
         }
         ci.cancel();
+    }
+
+    @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
+    public void hurt(DamageSource p_21016_, float p_21017_, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity livingEntity = (LivingEntity) (Object) this;
+        if (!net.minecraftforge.common.ForgeHooks.onLivingAttack(livingEntity, p_21016_, p_21017_)) cir.setReturnValue(false);
+        if (this.isInvulnerableTo(p_21016_)) {
+            cir.setReturnValue(false);
+        } else if (livingEntity.level.isClientSide) {
+            cir.setReturnValue(false);
+        } else if (livingEntity.isDeadOrDying()) {
+            cir.setReturnValue(false);
+        } else if (p_21016_.is(DamageTypeTags.IS_FIRE) && livingEntity.hasEffect(MobEffects.FIRE_RESISTANCE)) {
+            cir.setReturnValue(false);
+        } else {
+            if (livingEntity.isSleeping() && !livingEntity.level.isClientSide) {
+                livingEntity.stopSleeping();
+            }
+
+            livingEntity.setNoActionTime(0);
+            float f = p_21017_;
+            boolean flag = false;
+            float f1 = 0.0F;
+            if (p_21017_ > 0.0F && livingEntity.isDamageSourceBlocked(p_21016_)) {
+                net.minecraftforge.event.entity.living.ShieldBlockEvent ev = net.minecraftforge.common.ForgeHooks.onShieldBlock(livingEntity, p_21016_, p_21017_);
+                if(!ev.isCanceled()) {
+                    if(ev.shieldTakesDamage()) this.hurtCurrentlyUsedShield(p_21017_);
+                    f1 = ev.getBlockedDamage();
+                    Debug.printToChat("Shield!");
+                    p_21017_ -= ev.getBlockedDamage();
+                    if (!p_21016_.is(DamageTypeTags.IS_PROJECTILE)) {
+                        Entity entity = p_21016_.getDirectEntity();
+                        if (entity instanceof LivingEntity) {
+                            LivingEntity livingentity1 = (LivingEntity)entity;
+                            this.blockUsingShield(livingentity1);
+                        }
+                    }
+
+                    flag = true;
+                }
+
+                if (p_21016_.is(DamageTypeTags.IS_FREEZING) && livingEntity.getType().is(EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES)) {
+                    p_21017_ *= 5.0F;
+                }
+            }
+
+            livingEntity.walkAnimation.setSpeed(1.5F);
+            boolean flag1 = true;
+            if ((float)livingEntity.invulnerableTime > 10.0F && !p_21016_.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
+                if (p_21017_ <= this.lastHurt) {
+                    cir.setReturnValue(false);
+                }
+
+                this.actuallyHurt(p_21016_, p_21017_ - this.lastHurt);
+                this.lastHurt = p_21017_;
+                flag1 = false;
+            } else {
+                this.lastHurt = p_21017_;
+                livingEntity.invulnerableTime = 20;
+                this.actuallyHurt(p_21016_, p_21017_);
+                livingEntity.hurtDuration = 10;
+                livingEntity.hurtTime = livingEntity.hurtDuration;
+            }
+
+            if (p_21016_.is(DamageTypeTags.DAMAGES_HELMET) && !livingEntity.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
+                this.hurtHelmet(p_21016_, p_21017_);
+                p_21017_ *= 0.75F;
+            }
+
+            Entity entity1 = p_21016_.getEntity();
+            if (entity1 != null) {
+                if (entity1 instanceof LivingEntity) {
+                    LivingEntity livingentity1 = (LivingEntity)entity1;
+                    if (!p_21016_.is(DamageTypeTags.NO_ANGER)) {
+                        livingEntity.setLastHurtByMob(livingentity1);
+                    }
+                }
+
+                if (entity1 instanceof Player) {
+                    Player player1 = (Player)entity1;
+                    this.lastHurtByPlayerTime = 100;
+                    this.lastHurtByPlayer = player1;
+                } else if (entity1 instanceof net.minecraft.world.entity.TamableAnimal tamableEntity) {
+                    if (tamableEntity.isTame()) {
+                        this.lastHurtByPlayerTime = 100;
+                        LivingEntity livingentity2 = tamableEntity.getOwner();
+                        if (livingentity2 instanceof Player) {
+                            Player player = (Player)livingentity2;
+                            this.lastHurtByPlayer = player;
+                        } else {
+                            this.lastHurtByPlayer = null;
+                        }
+                    }
+                }
+            }
+
+            if (flag1) {
+                if (flag) {
+                    livingEntity.level.broadcastEntityEvent(livingEntity, (byte)29);
+                } else {
+                    livingEntity.level.broadcastDamageEvent(livingEntity, p_21016_);
+                }
+
+                if (!p_21016_.is(DamageTypeTags.NO_IMPACT) && (!flag || p_21017_ > 0.0F)) {
+                    this.markHurt();
+                }
+
+                if (entity1 != null && !p_21016_.is(DamageTypeTags.IS_EXPLOSION)) {
+                    double d0 = entity1.getX() - livingEntity.getX();
+
+                    double d1;
+                    for(d1 = entity1.getZ() - livingEntity.getZ(); d0 * d0 + d1 * d1 < 1.0E-4D; d1 = (Math.random() - Math.random()) * 0.01D) {
+                        d0 = (Math.random() - Math.random()) * 0.01D;
+                    }
+
+                    livingEntity.knockback((double)0.4F, d0, d1);
+                    if (!flag) {
+                        livingEntity.indicateDamage(d0, d1);
+                    }
+                }
+            }
+
+            if (livingEntity.isDeadOrDying()) {
+                if (!this.checkTotemDeathProtection(p_21016_)) {
+                    SoundEvent soundevent = this.getDeathSound();
+                    if (flag1 && soundevent != null) {
+                        livingEntity.playSound(soundevent, this.getSoundVolume(), livingEntity.getVoicePitch());
+                    }
+
+                    livingEntity.die(p_21016_);
+                }
+            } else if (flag1) {
+                this.playHurtSound(p_21016_);
+            }
+
+            boolean flag2 = !flag || p_21017_ > 0.0F;
+            if (flag2) {
+                this.lastDamageSource = p_21016_;
+                this.lastDamageStamp = livingEntity.level.getGameTime();
+            }
+
+            if (livingEntity instanceof ServerPlayer) {
+                CriteriaTriggers.ENTITY_HURT_PLAYER.trigger((ServerPlayer)livingEntity, p_21016_, f, p_21017_, flag);
+                if (f1 > 0.0F && f1 < 3.4028235E37F) {
+                    ((ServerPlayer)livingEntity).awardStat(Stats.CUSTOM.get(Stats.DAMAGE_BLOCKED_BY_SHIELD), Math.round(f1 * 10.0F));
+                }
+            }
+
+            if (entity1 instanceof ServerPlayer) {
+                CriteriaTriggers.PLAYER_HURT_ENTITY.trigger((ServerPlayer)entity1, livingEntity, p_21016_, f, p_21017_, flag);
+            }
+
+            cir.setReturnValue(flag2);
+        }
     }
 }
 
