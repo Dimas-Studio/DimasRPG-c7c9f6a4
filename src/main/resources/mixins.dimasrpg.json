@@ -9,6 +9,7 @@
     "MixinEntity",
     "MixinItem",
     "MixinLivingEntity",
+    "MixinPlayer",
     "MixinSwordItem"
   ],
   "client": [],

@@ -1,27 +1,19 @@
 package com.andrey66.dimasrpg.config;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.*;
-import java.nio.file.Path;
-
 import com.andrey66.dimasrpg.DimasRPG;
 import com.google.common.reflect.TypeToken;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
+import com.google.gson.*;
 import net.minecraftforge.fml.loading.FMLPaths;
 
-// Класс для работы с файлом конфига оружий
-public class DimasRPGWeaponsCommonConfig {
+import java.io.*;
+import java.lang.reflect.Type;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+// Класс для работы с файлом конфига снарядов
+public class DimasRPGProjectileCommonConfig {
 
     // Gson переменная для конвертации словаря в json строку и наоборот
     public static final Gson GSON = new GsonBuilder()
@@ -32,7 +24,7 @@ public class DimasRPGWeaponsCommonConfig {
     public static void initConfig(String mod_id, String config_folder) {
 
         // Установка базовых значений конфига
-        ConfigWeaponsValues.setDefaultConfigValues();
+        ConfigProjectileValues.setDefaultConfigValues();
 
         // Получение пути дирректории хранения конфигов
         Path configDir = FMLPaths.CONFIGDIR.get();
@@ -48,15 +40,15 @@ public class DimasRPGWeaponsCommonConfig {
             }
         }
 
-        File file = folderPath.resolve(mod_id + "-weapons-common.json").toFile();
+        File file = folderPath.resolve(mod_id + "-projectile-common.json").toFile();
         if(!file.exists()) {
             // Конфиг файл не найден, создаём новый с значениями по умолчанию
-            DimasRPG.LOGGER.info("Could not find weapon config, generating new default config.");
+            DimasRPG.LOGGER.info("Could not find projectile config, generating new default config.");
             saveConfig(file);
         }
         else {
             // Конфиг файл найден, начинаем чтение
-            DimasRPG.LOGGER.info("Reading config values from file.");
+            DimasRPG.LOGGER.info("Reading projectile values from file.");
             readConfig(file);
         }
     }
@@ -73,7 +65,7 @@ public class DimasRPGWeaponsCommonConfig {
                 DimasRPG.LOGGER.error("Weapon config file have wrong syntax, use default config.");
             } else {
                 // Очитска значений по умолчанию и последующее заполнение параметрами из файла
-                ConfigWeaponsValues.clearDefaultConfigValues();
+                ConfigProjectileValues.clearDefaultConfigValues();
 
                 for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
                     String name = entry.getKey();
@@ -82,7 +74,7 @@ public class DimasRPGWeaponsCommonConfig {
                     Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
                     String type = innerMap.keySet().iterator().next();
                     Float value = innerMap.get(type);
-                    ConfigWeaponsValues.put(name, type, value);
+                    ConfigProjectileValues.put(name, type, value);
                 }
             }
             // Закрытие файла для чтения
@@ -99,7 +91,7 @@ public class DimasRPGWeaponsCommonConfig {
     private static void saveConfig(File file) {
 
         // Сортировка переменных по умолчанию для удобства чтения
-        Object[] names = ConfigWeaponsValues.getKeys().toArray();
+        Object[] names = ConfigProjectileValues.getKeys().toArray();
         Arrays.sort(names);
 
         // Общий словарь всего конфига
@@ -108,8 +100,8 @@ public class DimasRPGWeaponsCommonConfig {
         for(Object name : names) {
             if(((String) name).matches("\\w+:\\w+")) {    // Провкрка на: "minecraft:creeper"
                 HashMap<String, Float> innerMap = new HashMap<>();
-                String type = ConfigWeaponsValues.getType((String) name);
-                Float value = ConfigWeaponsValues.getValue((String) name);
+                String type = ConfigProjectileValues.getType((String) name);
+                Float value = ConfigProjectileValues.getValue((String) name);
                 innerMap.put(type, value);
                 items.put((String) name, innerMap);
             }
@@ -152,7 +144,7 @@ public class DimasRPGWeaponsCommonConfig {
                 if (innerMap.size() != 1) {
                     return false;
                 }
-                if (!type.matches("^(magic|range|melee|admin)$")) {
+                if (!type.matches("^(magic|range|melee)$")) {
                     return false;
                 }
                 if (!name.matches("^[a-z0-9_-]+:[a-z0-9+_-]+$")) {

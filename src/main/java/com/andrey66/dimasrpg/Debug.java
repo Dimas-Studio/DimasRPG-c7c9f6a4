@@ -16,4 +16,8 @@ public class Debug {
             Minecraft.getInstance().player.sendSystemMessage(
                     Component.literal(S));
     }
+
+    public static int a(){
+        return 1;
+    }
 }

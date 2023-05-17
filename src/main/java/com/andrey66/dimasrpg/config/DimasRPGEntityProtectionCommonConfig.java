@@ -1,27 +1,20 @@
 package com.andrey66.dimasrpg.config;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.*;
-import java.nio.file.Path;
-
 import com.andrey66.dimasrpg.DimasRPG;
 import com.google.common.reflect.TypeToken;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
+import com.google.gson.*;
 import net.minecraftforge.fml.loading.FMLPaths;
 
-// Класс для работы с файлом конфига оружий
-public class DimasRPGWeaponsCommonConfig {
+import java.io.*;
+import java.lang.reflect.Type;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
+// Класс для работы с файлом конфига брони
+public class DimasRPGEntityProtectionCommonConfig {
 
     // Gson переменная для конвертации словаря в json строку и наоборот
     public static final Gson GSON = new GsonBuilder()
@@ -32,7 +25,7 @@ public class DimasRPGWeaponsCommonConfig {
     public static void initConfig(String mod_id, String config_folder) {
 
         // Установка базовых значений конфига
-        ConfigWeaponsValues.setDefaultConfigValues();
+        ConfigEntityArmorValues.setDefaultConfigValues();
 
         // Получение пути дирректории хранения конфигов
         Path configDir = FMLPaths.CONFIGDIR.get();
@@ -48,15 +41,15 @@ public class DimasRPGWeaponsCommonConfig {
             }
         }
 
-        File file = folderPath.resolve(mod_id + "-weapons-common.json").toFile();
+        File file = folderPath.resolve(mod_id + "-entity-protection-common.json").toFile();
         if(!file.exists()) {
             // Конфиг файл не найден, создаём новый с значениями по умолчанию
-            DimasRPG.LOGGER.info("Could not find weapon config, generating new default config.");
+            DimasRPG.LOGGER.info("Could not find entity armor config, generating new default config.");
             saveConfig(file);
         }
         else {
             // Конфиг файл найден, начинаем чтение
-            DimasRPG.LOGGER.info("Reading config values from file.");
+            DimasRPG.LOGGER.info("Reading config armor values from file.");
             readConfig(file);
         }
     }
@@ -70,19 +63,20 @@ public class DimasRPGWeaponsCommonConfig {
 
             // Валидация json структуры
             if (!validateConfig(json)) {
-                DimasRPG.LOGGER.error("Weapon config file have wrong syntax, use default config.");
+                DimasRPG.LOGGER.error("Armor config file have wrong syntax, use default config.");
             } else {
                 // Очитска значений по умолчанию и последующее заполнение параметрами из файла
-                ConfigWeaponsValues.clearDefaultConfigValues();
+                ConfigEntityArmorValues.clearDefaultConfigValues();
 
                 for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
                     String name = entry.getKey();
-                    Type pattern = new TypeToken<Map<String, Float>>() {
-                    }.getType();
+                    Type pattern = new TypeToken<Map<String, Float>>() {}.getType();
                     Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
-                    String type = innerMap.keySet().iterator().next();
-                    Float value = innerMap.get(type);
-                    ConfigWeaponsValues.put(name, type, value);
+                    for (Map.Entry<String, Float> entry1 : innerMap.entrySet()) {
+                        String type = entry1.getKey();
+                        Float value = entry1.getValue();
+                        ConfigEntityArmorValues.put(name, new HashMap<>(){{put(type, value);}});
+                    }
                 }
             }
             // Закрытие файла для чтения
@@ -99,18 +93,20 @@ public class DimasRPGWeaponsCommonConfig {
     private static void saveConfig(File file) {
 
         // Сортировка переменных по умолчанию для удобства чтения
-        Object[] names = ConfigWeaponsValues.getKeys().toArray();
+        Object[] names = ConfigEntityArmorValues.getKeys().toArray();
         Arrays.sort(names);
 
         // Общий словарь всего конфига
         HashMap<String, HashMap<String, Float>> items = new HashMap<>();
 
         for(Object name : names) {
-            if(((String) name).matches("\\w+:\\w+")) {    // Провкрка на: "minecraft:creeper"
+            if(((String) name).matches("\\w+:\\w+") || (name.equals("player"))) {    // Провкрка на: "minecraft:creeper"
                 HashMap<String, Float> innerMap = new HashMap<>();
-                String type = ConfigWeaponsValues.getType((String) name);
-                Float value = ConfigWeaponsValues.getValue((String) name);
-                innerMap.put(type, value);
+                for (Map.Entry<String, Float> entry : Objects.requireNonNull(ConfigEntityArmorValues.getTypes((String) name)).entrySet()){
+                    String type = entry.getKey();
+                    Float value = entry.getValue();
+                    innerMap.put(type, value);
+                }
                 items.put((String) name, innerMap);
             }
         }
@@ -125,7 +121,7 @@ public class DimasRPGWeaponsCommonConfig {
             writer.close();
         } catch (IOException e) {
             // невозможно создать файл
-            DimasRPG.LOGGER.warn("Could not save config file.");
+            DimasRPG.LOGGER.warn("Could not save armor config file.");
             e.printStackTrace();
         }
     }
@@ -135,28 +131,20 @@ public class DimasRPGWeaponsCommonConfig {
         for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
             try {
                 String name = entry.getKey();
-                Type pattern = new TypeToken<Map<String, Float>>() {}.getType();
-                Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
-                String type = innerMap.keySet().iterator().next();
-                Float value = innerMap.get(type);
-
                 if (name == null || name.isEmpty()) {
                     return false;
                 }
-                if (type == null || type.isEmpty()) {
+                if (!(name.matches("^[a-z0-9_-]+:[a-z0-9+_-]+$") || name.equals("player"))) {
                     return false;
                 }
-                if (value < 0) {
-                    return false;
-                }
-                if (innerMap.size() != 1) {
-                    return false;
-                }
-                if (!type.matches("^(magic|range|melee|admin)$")) {
-                    return false;
-                }
-                if (!name.matches("^[a-z0-9_-]+:[a-z0-9+_-]+$")) {
-                    return false;
+
+                Type pattern = new TypeToken<Map<String, Float>>() {}.getType();
+                Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
+                for (Map.Entry<String, Float> entry1 : innerMap.entrySet()) {
+                    String type = entry1.getKey();
+                    if (type == null || type.isEmpty()) {
+                        return false;
+                    }
                 }
             } catch (Exception e){
                 return false;

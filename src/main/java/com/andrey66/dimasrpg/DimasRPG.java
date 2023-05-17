@@ -1,8 +1,7 @@
 package com.andrey66.dimasrpg;
 
 import com.andrey66.dimasrpg.attribute.ModAttributes;
-import com.andrey66.dimasrpg.config.DimasRPGArmorCommonConfig;
-import com.andrey66.dimasrpg.config.DimasRPGWeaponsCommonConfig;
+import com.andrey66.dimasrpg.config.*;
 import com.andrey66.dimasrpg.item.ModItems;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -24,6 +23,7 @@ public class DimasRPG
 {
     // регистрация mod id для ссылок из конфиг файлов
     public static final String MOD_ID = "dimasrpg";
+    public static final String CONFIG_FOLDER = "dimasrpg";
     public static final Logger LOGGER = LogUtils.getLogger(); // Создание инструмента для логгинга
     public DimasRPG() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -31,8 +31,12 @@ public class DimasRPG
         ModAttributes.register(modEventBus); // регистрация аттрибутов
         ModItems.register(modEventBus); // регистрация предметов
         modEventBus.addListener(this::commonSetup);
-        DimasRPGWeaponsCommonConfig.initConfig(MOD_ID); // регистрация конфигоа оружия
-        DimasRPGArmorCommonConfig.initConfig(MOD_ID); // регистрация конфигоа брони
+        DimasRPGWeaponsCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER); // регистрация конфигов
+        DimasRPGArmorCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
+        DimasRPGProjectileCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
+        DimasRPGMobDamageCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
+        DimasRPGEntityProtectionCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
+        DimasRPGEntityDamageCommonConfig.initConfig(MOD_ID, CONFIG_FOLDER);
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
 

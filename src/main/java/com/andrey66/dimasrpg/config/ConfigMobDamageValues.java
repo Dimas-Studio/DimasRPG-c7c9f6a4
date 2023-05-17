@@ -1,19 +1,19 @@
 package com.andrey66.dimasrpg.config;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Set;
 
-// Класс определения структуры конфига оружий
-public class ConfigWeaponsValues {
+// Класс определения структуры конфига урона существ
+public class ConfigMobDamageValues {
 
     // Хрант в себе словарь из конфиг файла
     private static final HashMap<String, HashMap<String, Float>> CONFIG_SPEC = new HashMap<>();
 
     // Метод настройки конфига по умолчанию
     public static void setDefaultConfigValues() {
-        put("minecraft:iron_sword", "melee", 20);
-        put("minecraft:diamond_sword", "melee", 40);
-        put("minecraft:bow", "range", 30);
-        put("minecraft:air", "melee", 0);
+        put("minecraft:zombie", "melee", 20);
+        put("minecraft:skeleton", "range", 1);
+        put("minecraft:blaze", "magic", 5);
     }
 
     // Метод очистки настроек конфига (используется для очистки настроек по умолчанию для замены их настройками их файла)
@@ -46,7 +46,9 @@ public class ConfigWeaponsValues {
             String type;
             Set<String> keys = CONFIG_SPEC.get(name).keySet();
             type = keys.iterator().next();
-            return CONFIG_SPEC.get(name).get(type);
+            if (CONFIG_SPEC.get(name).containsKey(type)) {
+                return CONFIG_SPEC.get(name).get(type);
+            }
         }
         return null;
     }
