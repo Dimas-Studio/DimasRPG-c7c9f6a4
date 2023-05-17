@@ -63,6 +63,7 @@ public class MixinItem {
                 put("melee", ModAttributes.MELEE_DAMAGE.get());
                 put("range", ModAttributes.RANGE_DAMAGE.get());
                 put("magic", ModAttributes.MAGIC_DAMAGE.get());
+                put("admin", ModAttributes.ADMIN_DAMAGE.get());
             }};
             if(ConfigWeaponsValues.getType(itemString) != null){
                 String armor_type = ConfigWeaponsValues.getType(itemString);

@@ -29,6 +29,8 @@ public class ModAttributes {
             () -> new RangeDamageAttribute("attribute.name.range_damage", 0.0));
     public static final RegistryObject<Attribute> MAGIC_DAMAGE = ATTRIBUTES.register("magic_damage",
             () -> new MagicDamageAttribute("attribute.name.magic_damage", 0.0));
+    public static final RegistryObject<Attribute> ADMIN_DAMAGE = ATTRIBUTES.register("admin_damage",
+            () -> new AdminDamageAttribute("attribute.name.admin_damage", 0.0));
 
 
     // Метод-триггер для вызова из главного класса мода
