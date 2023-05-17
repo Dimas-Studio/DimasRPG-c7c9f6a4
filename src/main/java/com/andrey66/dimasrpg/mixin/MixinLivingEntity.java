@@ -143,7 +143,8 @@ public abstract class MixinLivingEntity extends MixinEntity{
                 .add(ModAttributes.RANGE_ARMOR.get())
                 .add(ModAttributes.MAGIC_DAMAGE.get())
                 .add(ModAttributes.MELEE_DAMAGE.get())
-                .add(ModAttributes.RANGE_DAMAGE.get());
+                .add(ModAttributes.RANGE_DAMAGE.get())
+                .add(ModAttributes.ADMIN_DAMAGE.get());
     }
 
     // Метод для изминения вычислений урона
@@ -154,7 +155,7 @@ public abstract class MixinLivingEntity extends MixinEntity{
             float vanilaDamage = 0;
             Entity entity = damageSource.getEntity();
             Entity directEntity = damageSource.getDirectEntity();
-            String weaponDamageType = "melee";
+            String weaponDamageType = "";
             String projectileDamageType = "";
             String mobDamageType = "";
             float projectileDamage = 0;
@@ -169,6 +170,8 @@ public abstract class MixinLivingEntity extends MixinEntity{
             float meleeDamage = 0;
             float rangeDamage = 0;
             float magicDamage = 0;
+            float adminDamage = 0;
+
             boolean uniqueDamage = false;
             boolean haveDistance = !Objects.equals(entity, directEntity);
 
@@ -225,6 +228,10 @@ public abstract class MixinLivingEntity extends MixinEntity{
                                     case ("magic") -> {
                                         weaponDamage = (float) livingEntity.getAttributeValue(ModAttributes.MAGIC_DAMAGE.get());
                                         weaponDamageType = "magic";
+                                    }
+                                    case ("admin") -> {
+                                        weaponDamage = (float) livingEntity.getAttributeValue(ModAttributes.ADMIN_DAMAGE.get());
+                                        weaponDamageType = "admin";
                                     }
                                 }
                                 // Урон нанесён в дальнем бою снарядом из конфига
@@ -283,6 +290,8 @@ public abstract class MixinLivingEntity extends MixinEntity{
             magicDamage += Objects.equals(mobDamageType, "magic") ? mobDamage : 0;
             magicDamage += Objects.equals(projectileDamageType, "magic") ? projectileDamage : 0;
 
+            adminDamage += Objects.equals(weaponDamageType, "admin") ? weaponDamage : 0;
+
             meleeDamage *= (1 + (entityMeleeDamageBonus/100));
             rangeDamage *= (1 + (entityRangeDamageBonus/100));
             magicDamage *= (1 + (entityMagicDamageBonus/100));
@@ -305,8 +314,8 @@ public abstract class MixinLivingEntity extends MixinEntity{
             Debug.printToChat("Range: " + rangeDamage);
             Debug.printToChat("Magic: " + magicDamage);
             Debug.printToChat("Vanila: " + vanilaDamage);
-
-            damage = meleeDamage + rangeDamage + magicDamage + vanilaDamage;
+            Debug.printToChat("Admin: " + adminDamage);
+            damage = meleeDamage + rangeDamage + magicDamage + vanilaDamage + adminDamage;
 
             this.blockedDamage = true;
 
@@ -348,8 +357,6 @@ public abstract class MixinLivingEntity extends MixinEntity{
         } else if (p_21016_.is(DamageTypeTags.IS_FIRE) && livingEntity.hasEffect(MobEffects.FIRE_RESISTANCE)) {
             cir.setReturnValue(false);
         } else {
-            int a = Debug.a();
-
             if (livingEntity.isSleeping() && !livingEntity.level.isClientSide) {
                 livingEntity.stopSleeping();
             }

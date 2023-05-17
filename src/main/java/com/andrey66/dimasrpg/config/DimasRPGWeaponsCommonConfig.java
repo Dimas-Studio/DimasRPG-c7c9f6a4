@@ -152,7 +152,7 @@ public class DimasRPGWeaponsCommonConfig {
                 if (innerMap.size() != 1) {
                     return false;
                 }
-                if (!type.matches("^(magic|range|melee)$")) {
+                if (!type.matches("^(magic|range|melee|admin)$")) {
                     return false;
                 }
                 if (!name.matches("^[a-z0-9_-]+:[a-z0-9+_-]+$")) {

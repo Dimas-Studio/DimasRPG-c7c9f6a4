@@ -63,6 +63,7 @@ public class MixinItem {
                 put("melee", ModAttributes.MELEE_DAMAGE.get());
                 put("range", ModAttributes.RANGE_DAMAGE.get());
                 put("magic", ModAttributes.MAGIC_DAMAGE.get());
+                put("admin", ModAttributes.ADMIN_DAMAGE.get());
             }};
             if(ConfigWeaponsValues.getType(itemString) != null){
                 String armor_type = ConfigWeaponsValues.getType(itemString);
@@ -84,10 +85,10 @@ public class MixinItem {
     @Inject(method = "getDefaultAttributeModifiers", at = @At("RETURN"), cancellable = true)
     public void setAttributesToProjectileWeapon(EquipmentSlot p_40390_, CallbackInfoReturnable<Multimap<Attribute, AttributeModifier>> cir) {
         Item item = (Item) (Object) this;
-        if (!(item instanceof ProjectileWeaponItem rangedItem)) {
+        if (item instanceof TieredItem || item instanceof ArmorItem) {
             return;
         }
-        String item_string = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(rangedItem)).toString();
+        String item_string = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)).toString();
         if (p_40390_ == EquipmentSlot.MAINHAND) {
             if (!defaultModifiersContains(item_string)) {
                 addNewAttribute(item_string);
