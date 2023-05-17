@@ -67,15 +67,15 @@ public abstract class MixinLivingEntity extends MixinEntity{
                 switch (damageType) {
                     case ("melee") -> {
                         this.hurtArmor(damageSource, damage);
-                        damage = ModCombatRules.getDamageAfterAbsorb(damage, this.getMeleeArmorValue());
+                        damage = ModCombatRules.getDamageAfterAbsorb(damage, this.getMeleeArmorValue(), 0, 0);
                     }
                     case ("range") -> {
                         this.hurtArmor(damageSource, damage);
-                        damage = ModCombatRules.getDamageAfterAbsorb(damage, this.getRangeArmorValue());
+                        damage = ModCombatRules.getDamageAfterAbsorb(damage, this.getRangeArmorValue(), 0, 0);
                     }
                     case ("magic") -> {
                         this.hurtArmor(damageSource, damage);
-                        damage = ModCombatRules.getDamageAfterAbsorb(damage, this.getMagicArmorValue());
+                        damage = ModCombatRules.getDamageAfterAbsorb(damage, this.getMagicArmorValue(), 0, 0);
                     }
                 }
             }
@@ -179,7 +179,9 @@ public abstract class MixinLivingEntity extends MixinEntity{
                                 }
                                 // Расчёт урона от снаряда
                                 bonusDamage = this.getDamageAfterArmorAbsorb(damageSource, projectileDamage, projectileType);
+
                             }
+                        Debug.printToChat("Снаряд: " + projectileType); // TODO: Удалить
                         } else {
                             // Снаряда в конфиге нет
                             String projectileName = directEntity.getEncodeId();
@@ -210,6 +212,7 @@ public abstract class MixinLivingEntity extends MixinEntity{
 
             // Добавление урона снаряда, если его тип отличается от предмета
             Debug.printToChat(damage + "+" + bonusDamage);
+            Debug.printToChat(damageType); // TODO: Удалить
             damage += bonusDamage;
 
             // Поглощение урона дополнительным здоровьем
