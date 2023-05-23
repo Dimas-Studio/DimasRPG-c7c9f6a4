@@ -27,7 +27,7 @@ jobs:
           PULL_REQUEST_NUMBER="${{ github.event.pull_request.number }}"
           API_URL="https://api.github.com/repos/${{ github.repository }}/issues/${PULL_REQUEST_NUMBER}/comments"
           AUTH_HEADER="Authorization: token $TOKEN"
-          COMMENT="Invalid branch. Please create the pull request from the 'testing' branch."
+          COMMENT="Invalid branch. Please create the pull request from the 'testing' branch." + ${{ github.event.pull_request.base.ref }}
 
           # Add comment
           RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "$AUTH_HEADER" -d "{\"body\": \"$COMMENT\"}" $API_URL)
