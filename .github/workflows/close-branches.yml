@@ -54,3 +54,23 @@ jobs:
           else
             echo "Failed to assign reviewer."
           fi
+          
+          - name: Add Comment to Closed Pull Request
+          if: steps.check_branch.outputs.invalid == 'true'
+          run: |
+            TOKEN="${{ secrets.GITHUB_TOKEN }}"
+            PULL_REQUEST_NUMBER="${{ github.event.pull_request.number }}"
+            API_URL="https://api.github.com/repos/${{ github.repository }}/issues/${PULL_REQUEST_NUMBER}/comments"
+            AUTH_HEADER="Authorization: token $TOKEN"
+            COMMENT="Invalid branch. Please create the pull request from the 'testing' branch."
+
+            # Add comment
+            RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "$AUTH_HEADER" -d "{\"body\": \"$COMMENT\"}" $API_URL)
+
+            if [[ "$RESPONSE_CODE" -eq 201 ]]; then
+              echo "Comment added to closed pull request successfully."
+            else
+              echo "Failed to add comment to closed pull request."
+            fi
+
+
