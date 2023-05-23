@@ -22,7 +22,35 @@ jobs:
 
       - name: Close Pull Request if invalid branch
         if: steps.check_branch.outputs.invalid == 'true'
-        uses: peter-evans/close-pull-request@v1
-        with:
-          comment: "Invalid branch. Please create the pull request from the 'testing' branch."
-          delete-branch: false
+        run: |
+          TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          PULL_REQUEST_NUMBER="${{ github.event.pull_request.number }}"
+          API_URL="https://api.github.com/repos/${{ github.repository }}/pulls/${PULL_REQUEST_NUMBER}"
+          AUTH_HEADER="Authorization: token $TOKEN"
+
+          # Close pull request
+          RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X PATCH -H "$AUTH_HEADER" -d '{"state": "closed"}' $API_URL)
+
+          if [[ "$RESPONSE_CODE" -eq 200 ]]; then
+            echo "Pull request closed successfully."
+          else
+            echo "Failed to close pull request."
+          fi
+
+      - name: Assign Reviewer
+        if: steps.check_branch.outputs.invalid == 'false'
+        run: |
+          TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          PULL_REQUEST_NUMBER="${{ github.event.pull_request.number }}"
+          API_URL="https://api.github.com/repos/${{ github.repository }}/pulls/${PULL_REQUEST_NUMBER}/requested_reviewers"
+          REVIEWER_USERNAME="Andrey-66"
+          AUTH_HEADER="Authorization: token $TOKEN"
+
+          # Add reviewer
+          RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "$AUTH_HEADER" -d "{\"reviewers\": [\"$REVIEWER_USERNAME\"]}" $API_URL)
+
+          if [[ "$RESPONSE_CODE" -eq 201 ]]; then
+            echo "Reviewer assigned successfully."
+          else
+            echo "Failed to assign reviewer."
+          fi
