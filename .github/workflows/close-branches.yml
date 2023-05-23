@@ -5,3 +5,24 @@ on:
     types:
       - opened
       - synchronize
+      
+jobs:
+  close-branches:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if branch is not testing
+        run: |
+          if [[ ${{ github.event.pull_request.base.ref }} != "testing" ]]; then
+            echo "::set-output name=invalid::true"
+          else
+            echo "::set-output name=invalid::false"
+          fi
+        id: check_branch
+
+      - name: Close Pull Request if invalid branch
+        if: steps.check_branch.outputs.invalid == 'true'
+        uses: peter-evans/close-pull-request@v1
+        with:
+          comment: "Invalid branch. Please create the pull request from the 'testing' branch."
+          delete-branch: false
