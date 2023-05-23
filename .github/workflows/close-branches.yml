@@ -1,0 +1,7 @@
+name: Close Branches
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
