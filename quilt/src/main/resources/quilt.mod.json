@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "mixin": [
+    "dimasrpg.mixins.json",
+    "dimasrpg-common.mixins.json"
+  ],
+  "quilt_loader": {
+    "group": "${group}",
+    "id": "dimasrpg",
+    "version": "${version}",
+    "metadata": {
+      "name": "DimasRPG",
+      "description": "This is an example description! Tell everyone what your mod is about!",
+      "contributors": {
+        "DimasStudio": "Owner"
+      },
+      "contact": {
+        "sources": "https://github.com/Dimas-Studio/DimasRPG-c7c9f6a4"
+      },
+      "icon": "assets/dimasrpg/icon.png"
+    },
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "entrypoints": {
+      "init": [
+        "com.dimasrpg.quilt.dimasrpgQuilt"
+      ]
+    },
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "version": "*"
+      },
+      {
+        "id": "quilt_base",
+        "version": "*"
+      },
+      {
+        "id": "minecraft",
+        "version": ">=1.20.1"
+      },
+      {
+        "id": "architectury",
+        "version": ">=9.1.12"
+      }
+    ]
+  },
+  "minecraft": {
+    "environment": "*"
+  }
+}
