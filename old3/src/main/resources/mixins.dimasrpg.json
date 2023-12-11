@@ -1,0 +1,17 @@
+{
+  "minVersion": "0.7.11",
+  "compatibilityLevel": "JAVA_17",
+  "package": "com.andrey66.dimasrpg.mixin",
+  "refmap": "mixins.dimasrpg.refmap.json",
+  "mixins": [
+    "MixinArmorItem",
+    "MixinDiggerItem",
+    "MixinEntity",
+    "MixinItem",
+    "MixinLivingEntity",
+    "MixinPlayer",
+    "MixinSwordItem"
+  ],
+  "client": [],
+  "server": []
+}
