@@ -31,7 +31,6 @@ public class DimasRPG {
     public static void init() {
         TABS.register();
         ITEMS.register();
-        
         System.out.println(ExampleExpectPlatform.getConfigDirectory().toAbsolutePath().normalize().toString());
     }
 }
