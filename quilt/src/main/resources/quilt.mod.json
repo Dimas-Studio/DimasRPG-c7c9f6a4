@@ -1,28 +1,28 @@
 {
   "schema_version": 1,
   "mixin": [
-    "examplemod.mixins.json",
-    "examplemod-common.mixins.json"
+    "dimasrpg.mixins.json",
+    "dimasrpg-common.mixins.json"
   ],
   "quilt_loader": {
     "group": "${group}",
-    "id": "examplemod",
+    "id": "dimasrpg",
     "version": "${version}",
     "metadata": {
-      "name": "Example Mod",
+      "name": "DimasRPG",
       "description": "This is an example description! Tell everyone what your mod is about!",
       "contributors": {
-        "Me!": "Owner"
+        "DimasStudio": "Owner"
       },
       "contact": {
-        "sources": "https://github.com/architectury/architectury-templates"
+        "sources": "https://github.com/Dimas-Studio/DimasRPG-c7c9f6a4"
       },
-      "icon": "assets/examplemod/icon.png"
+      "icon": "assets/dimasrpg/icon.png"
     },
     "intermediate_mappings": "net.fabricmc:intermediary",
     "entrypoints": {
       "init": [
-        "net.examplemod.quilt.ExampleModQuilt"
+        "com.dimasrpg.quilt.dimasrpgQuilt"
       ]
     },
     "depends": [

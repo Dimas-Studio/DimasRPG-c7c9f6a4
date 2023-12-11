@@ -1,27 +1,27 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "dimasrpg",
   "version": "${version}",
-  "name": "Example Mod",
+  "name": "Dimas RPG",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
-    "Me!"
+    "DimasStudio"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://discord.gg/xfBMY5RvwG",
+    "sources": "https://github.com/Dimas-Studio/DimasRPG-c7c9f6a4"
   },
   "license": "Insert License Here",
   "icon": "assets/examplemod/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.examplemod.fabric.ExampleModFabric"
+      "com.dimasrpg.fabric.DimasRPGFabric"
     ]
   },
   "mixins": [
-    "examplemod.mixins.json",
-    "examplemod-common.mixins.json"
+    "dimasrpg.mixins.json",
+    "dimasrpg-common.mixins.json"
   ],
   "depends": {
     "fabric": "*",
