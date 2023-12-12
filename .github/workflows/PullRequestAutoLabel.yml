@@ -5,25 +5,27 @@ on:
     types: [opened, reopened, synchronize]
 
 jobs:
-  add-bug-label:
+  add-label:
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
 
-      - name: Check if PR starts with 'bug/'
+      - name: Check if PR title starts with 'feature/'
+        if: startsWith(github.event.pull_request.title, 'feature/')
         run: |
-          if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
-            if [[ $(echo "${{ github.event.pull_request.head.ref }}" | grep -c '^bug/') -eq 1 ]]; then
-              echo "Adding 'bug' label to the pull request."
-              TOKEN="${{ secrets.GITHUB_TOKEN }}"
-              ISSUE_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-              curl -X POST -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github.v3+json" -d '{"labels":["bug"]}' "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}/labels"
-            else
-              echo "No action needed. Pull request doesn't start with 'bug/'."
-            fi
-          fi
+          TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          OWNER="${{ github.repository_owner }}"
+          REPO="${{ github.event.repository.name }}"
+          
+          curl -X POST -H "Authorization: token $TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/$OWNER/$REPO/issues/$PR_NUMBER/labels" \
+          -d '{
+            "labels": ["feature"]
+          }'
 
       - name: Check if PR starts with 'feature/'
         run: |
