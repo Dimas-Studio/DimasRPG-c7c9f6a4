@@ -1,0 +1,44 @@
+name: Add Label to PRs
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  add-label:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Check if PR title starts with 'feature/'
+        if: startsWith(github.event.pull_request.title, 'feature/')
+        run: |
+          TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          OWNER="${{ github.repository_owner }}"
+          REPO="${{ github.event.repository.name }}"
+          
+          curl -X POST -H "Authorization: token $TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/$OWNER/$REPO/issues/$PR_NUMBER/labels" \
+          -d '{
+            "labels": ["feature"]
+          }'
+
+      - name: Check if PR title starts with 'bug/'
+        if: startsWith(github.event.pull_request.title, 'bug/')
+        run: |
+          TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          OWNER="${{ github.repository_owner }}"
+          REPO="${{ github.event.repository.name }}"
+
+          curl -X POST -H "Authorization: token $TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/$OWNER/$REPO/issues/$PR_NUMBER/labels" \
+          -d '{
+            "labels": ["bug"]
+          }'

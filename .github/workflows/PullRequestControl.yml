@@ -1,0 +1,30 @@
+name: Pull Request Control
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Check branch name (testing -> master)
+        run: |
+          if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
+            if [[ ${{ github.event.pull_request.base.ref }} == "master" && ${{ github.event.pull_request.head.ref }} != "testing" ]]; then
+              echo "Pull requests can only be merged from 'testing' into 'master'."
+              exit 1
+            fi
+          fi
+      - name: Check branch name (develop -> testing)
+        run: |
+          if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
+            if [[ ${{ github.event.pull_request.base.ref }} == "testing" && ${{ github.event.pull_request.head.ref }} != "develop" ]]; then
+              echo "Pull requests can only be merged from 'develop' into 'testing'."
+              exit 1
+            fi
+          fi
