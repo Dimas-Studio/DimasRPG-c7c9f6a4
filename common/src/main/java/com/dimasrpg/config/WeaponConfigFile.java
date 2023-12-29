@@ -32,7 +32,7 @@ public class WeaponConfigFile {
         boolean one_config_is_valid = false;
         File[] config_files = ConfigProvider.CONFDIR.resolve(mod_id).resolve(NAME).toFile().listFiles();
         if (config_files == null || config_files.length == 0) {
-            DimasRPG.LOGGER.warn(NAME + "directory is empty, generate default file");
+            DimasRPG.LOGGER.warn(NAME + " directory is empty, generate default file");
             WeaponConfigValues.setDefaultConfigValues();
             generateDefaultConfig(ConfigProvider.CONFDIR.resolve(mod_id).resolve(NAME).resolve("minecraft.json").toFile());
             return;
@@ -44,7 +44,7 @@ public class WeaponConfigFile {
                 continue;
             }
             if (!validateConfig(file_content)){
-                DimasRPG.LOGGER.warn(file + "is invalid!");
+                DimasRPG.LOGGER.warn(file + " is invalid!");
                 continue;
             }
             one_config_is_valid = true;
@@ -52,9 +52,10 @@ public class WeaponConfigFile {
                 String name = entry.getKey();
                 Type pattern = new TypeToken<Map<String, Float>>() {}.getType();
                 Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
-                String type = innerMap.keySet().iterator().next(); //TODO только один тип!
-                Float value = innerMap.get(type);
-                WeaponConfigValues.put(name, type, value);
+                for (String type : innerMap.keySet()) {
+                    Float value = innerMap.get(type);
+                    WeaponConfigValues.put(name, type, value);
+                }
             }
         }
         if (!one_config_is_valid) {
@@ -69,26 +70,27 @@ public class WeaponConfigFile {
                 String name = entry.getKey();
                 Type pattern = new TypeToken<Map<String, Float>>() {}.getType();
                 Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
-                String type = innerMap.keySet().iterator().next(); //TODO только один тип!
-                Float value = innerMap.get(type);
-
-                if (name == null || name.isEmpty()) {
-                    return false;
-                }
-                if (type == null || type.isEmpty()) {
-                    return false;
-                }
-                if (value < 0) {
-                    return false;
-                }
-                if (innerMap.size() != 1) {
-                    return false;
-                }
-                if (!type.matches("^(magic|range|melee|admin)$")) {
-                    return false;
-                }
-                if (!name.matches("^[a-z0-9_-]+:[a-z0-9+_-]+$")) {
-                    return false;
+                for (String type : innerMap.keySet()) {
+                    Float value = innerMap.get(type);
+                    WeaponConfigValues.put(name, type, value);
+                    if (name == null || name.isEmpty()) {
+                        return false;
+                    }
+                    if (type == null || type.isEmpty()) {
+                        return false;
+                    }
+                    if (value < 0) {
+                        return false;
+                    }
+                    if (innerMap.isEmpty()) {
+                        return false;
+                    }
+                    if (!type.matches("^(magic|range|melee|admin)$")) {
+                        return false;
+                    }
+                    if (!name.matches("^[a-z0-9_-]+:[a-z0-9+_-]+$")) {
+                        return false;
+                    }
                 }
             } catch (Exception e){
                 return false;
