@@ -74,32 +74,25 @@ public class WeaponConfigFile {
                     Float value = innerMap.get(type);
                     WeaponConfigValues.put(name, type, value);
                     if (name == null || name.isEmpty()) {
-                        DimasRPG.LOGGER.error("1");
                         return false;
                     }
                     if (type == null || type.isEmpty()) {
-                        DimasRPG.LOGGER.error("2");
                         return false;
                     }
                     if (value < 0) {
-                        DimasRPG.LOGGER.error("3");
                         return false;
                     }
                     if (innerMap.isEmpty()) {
-                        DimasRPG.LOGGER.error("4");
                         return false;
                     }
                     if (!type.matches("^(magic|range|melee|admin)$")) {
-                        DimasRPG.LOGGER.error("5");
                         return false;
                     }
                     if (!name.matches("^[a-z0-9_-]+:[a-z0-9+_-]+$")) {
-                        DimasRPG.LOGGER.error("6");
                         return false;
                     }
                 }
             } catch (Exception e){
-                DimasRPG.LOGGER.error("7");
                 return false;
             }
         }
