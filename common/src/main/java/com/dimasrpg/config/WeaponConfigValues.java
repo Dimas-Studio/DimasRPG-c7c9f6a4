@@ -19,6 +19,9 @@ public class WeaponConfigValues implements ConfigValuesInterface{
     // метод добавления нового поля конифга
     public static void put(String name, String type, float value) {
         HashMap<String, Float> innerMap = new HashMap<>();
+        if (CONTENT.containsKey(name)) {
+            innerMap = CONTENT.get(name);
+        }
         innerMap.put(type, value);
         CONTENT.put(name, innerMap);
     }
