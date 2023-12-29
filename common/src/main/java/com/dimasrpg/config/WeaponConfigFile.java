@@ -52,7 +52,7 @@ public class WeaponConfigFile {
                 String name = entry.getKey();
                 Type pattern = new TypeToken<Map<String, Float>>() {}.getType();
                 Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
-                String type = innerMap.keySet().iterator().next();
+                String type = innerMap.keySet().iterator().next(); //TODO только один тип!
                 Float value = innerMap.get(type);
                 WeaponConfigValues.put(name, type, value);
             }
@@ -69,7 +69,7 @@ public class WeaponConfigFile {
                 String name = entry.getKey();
                 Type pattern = new TypeToken<Map<String, Float>>() {}.getType();
                 Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
-                String type = innerMap.keySet().iterator().next();
+                String type = innerMap.keySet().iterator().next(); //TODO только один тип!
                 Float value = innerMap.get(type);
 
                 if (name == null || name.isEmpty()) {
@@ -100,8 +100,7 @@ public class WeaponConfigFile {
     private static void generateDefaultConfig(File file) {
         // Сортировка переменных по умолчанию для удобства чтения
         Object[] names = WeaponConfigValues.getKeys().toArray();
-        Arrays.sort(names);
-        System.out.println(names);
+        Arrays.sort(names); //TODO алфавит!
         // Общий словарь всего конфига
         HashMap<String, HashMap<String, Float>> items = new HashMap<>();
 
