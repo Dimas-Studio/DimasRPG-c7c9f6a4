@@ -16,8 +16,8 @@ import java.util.Map;
 /**
  * Класс для работы с файлом конфига брони
  */
-public class EntityConfigFile {
-    public static String NAME = "entity";
+public class BulletConfigFile {
+    public static String NAME = "bullet";
     // Gson переменная для конвертации словаря в json строку и наоборот
     public static final Gson GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -32,7 +32,7 @@ public class EntityConfigFile {
         File[] config_files = ConfigProvider.CONFDIR.resolve(mod_id).resolve(NAME).toFile().listFiles();
         if (config_files == null || config_files.length == 0) {
             DimasRPG.LOGGER.warn(NAME + " directory is empty, generate default file");
-            EntityConfigValues.setDefaultConfigValues();
+            BulletConfigValues.setDefaultConfigValues();
             generateDefaultConfig(ConfigProvider.CONFDIR.resolve(mod_id).resolve(NAME).resolve("minecraft.json").toFile());
             return;
         }
@@ -59,7 +59,7 @@ public class EntityConfigFile {
         }
         if (!one_config_is_valid) {
             DimasRPG.LOGGER.warn("No valid files are in directory, using default values");
-            EntityConfigValues.setDefaultConfigValues();
+            BulletConfigValues.setDefaultConfigValues();
         }
     }
 
@@ -100,7 +100,7 @@ public class EntityConfigFile {
 
     private static void generateDefaultConfig(File file) {
         // Сортировка переменных по умолчанию для удобства чтения
-        Object[] names = EntityConfigValues.getKeys().toArray();
+        Object[] names = BulletConfigValues.getKeys().toArray();
         Arrays.sort(names); //TODO алфавит!
         // Общий словарь всего конфига
         HashMap<String, HashMap<String, Float>> items = new HashMap<>();
@@ -108,9 +108,9 @@ public class EntityConfigFile {
         for(Object name : names) {
             if(((String) name).matches("\\w+:\\w+")) {    // Провкрка на: "minecraft:creeper"
                 HashMap<String, Float> innerMap = new HashMap<>();
-                String[] types = EntityConfigValues.getTypes((String) name);
+                String[] types = BulletConfigValues.getTypes((String) name);
                 for (String type : types) {
-                    Float value = EntityConfigValues.getValue((String) name, type);
+                    Float value = BulletConfigValues.getValue((String) name, type);
                     innerMap.put(type, value);
                 }
                 items.put((String) name, innerMap);

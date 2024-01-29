@@ -3,7 +3,7 @@ package com.dimasrpg.config;
 import java.util.HashMap;
 import java.util.Set;
 
-public class EntityConfigValues implements ConfigValuesInterface{
+public class BulletConfigValues implements ConfigValuesInterface{
     // Хрант в себе словарь из конфиг файла
     private static final HashMap<String, HashMap<String, Float>> CONTENT = new HashMap<>();
 
@@ -11,7 +11,7 @@ public class EntityConfigValues implements ConfigValuesInterface{
         return CONTENT;
     }
     public static void setDefaultConfigValues() {
-        DefaultEntityValues.init();
+        DefaultBulletValues.init();
     }
     public static void clearDefaultConfigValues() {
         CONTENT.clear();

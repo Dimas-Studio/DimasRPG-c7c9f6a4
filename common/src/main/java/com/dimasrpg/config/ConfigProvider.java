@@ -61,6 +61,6 @@ public class ConfigProvider {
     public static void createReadAllConfigs(){
         WeaponConfigFile.init(DimasRPG.MOD_ID);
         ArmorConfigFile.init(DimasRPG.MOD_ID);
-        EntityConfigFile.init(DimasRPG.MOD_ID);
+        BulletConfigFile.init(DimasRPG.MOD_ID);
     }
 }
