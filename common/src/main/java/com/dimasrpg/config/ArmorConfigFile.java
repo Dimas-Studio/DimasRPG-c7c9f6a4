@@ -53,7 +53,7 @@ public class ArmorConfigFile {
                 Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
                 for (String type : innerMap.keySet()) {
                     Float value = innerMap.get(type);
-                    WeaponConfigValues.put(name, type, value);
+                    ArmorConfigValues.put(name, type, value);
                 }
             }
         }
@@ -71,7 +71,7 @@ public class ArmorConfigFile {
                 Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
                 for (String type : innerMap.keySet()) {
                     Float value = innerMap.get(type);
-                    WeaponConfigValues.put(name, type, value);
+                    ArmorConfigValues.put(name, type, value);
                     if (name == null || name.isEmpty()) {
                         return false;
                     }
