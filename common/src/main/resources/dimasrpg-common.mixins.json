@@ -8,7 +8,8 @@
   ],
   "mixins": [
     "MixinEntity",
-    "MixinLivingEntity"
+    "MixinLivingEntity",
+    "MixinItem"
   ],
   "injectors": {
     "defaultRequire": 1

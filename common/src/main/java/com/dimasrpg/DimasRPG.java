@@ -1,5 +1,6 @@
 package com.dimasrpg;
 
+import com.dimasrpg.attribute.ModAttributes;
 import com.dimasrpg.config.ConfigProvider;
 import com.dimasrpg.item.ModItems;
 import com.google.common.base.Suppliers;
@@ -20,6 +21,7 @@ public class DimasRPG {
         LOGGER.makeLoggingEventBuilder(Level.DEBUG);
         //Точка входа в мод
         ConfigProvider.createReadAllConfigs();
+        ModAttributes.init(); // Регистрация аттрибутов
         ModItems.init(); // Регистрация предметов
         System.out.println(ExampleExpectPlatform.getConfigDirectory().toAbsolutePath().normalize().toString());
     }
