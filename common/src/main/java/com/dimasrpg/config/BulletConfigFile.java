@@ -16,8 +16,8 @@ import java.util.Map;
 /**
  * Класс для работы с файлом конфига брони
  */
-public class ArmorConfigFile {
-    public static String NAME = "armor";
+public class BulletConfigFile {
+    public static String NAME = "bullet";
     // Gson переменная для конвертации словаря в json строку и наоборот
     public static final Gson GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -32,7 +32,7 @@ public class ArmorConfigFile {
         File[] config_files = ConfigProvider.CONFDIR.resolve(mod_id).resolve(NAME).toFile().listFiles();
         if (config_files == null || config_files.length == 0) {
             DimasRPG.LOGGER.warn(NAME + " directory is empty, generate default file");
-            ArmorConfigValues.setDefaultConfigValues();
+            BulletConfigValues.setDefaultConfigValues();
             generateDefaultConfig(ConfigProvider.CONFDIR.resolve(mod_id).resolve(NAME).resolve("minecraft.json").toFile());
             return;
         }
@@ -53,13 +53,13 @@ public class ArmorConfigFile {
                 Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
                 for (String type : innerMap.keySet()) {
                     Float value = innerMap.get(type);
-                    ArmorConfigValues.put(name, type, value);
+                    BulletConfigValues.put(name, type, value);
                 }
             }
         }
         if (!one_config_is_valid) {
             DimasRPG.LOGGER.warn("No valid files are in directory, using default values");
-            ArmorConfigValues.setDefaultConfigValues();
+            BulletConfigValues.setDefaultConfigValues();
         }
     }
 
@@ -71,7 +71,7 @@ public class ArmorConfigFile {
                 Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
                 for (String type : innerMap.keySet()) {
                     Float value = innerMap.get(type);
-                    ArmorConfigValues.put(name, type, value);
+                    BulletConfigValues.put(name, type, value);
                     if (name == null || name.isEmpty()) {
                         return false;
                     }
@@ -100,7 +100,7 @@ public class ArmorConfigFile {
 
     private static void generateDefaultConfig(File file) {
         // Сортировка переменных по умолчанию для удобства чтения
-        Object[] names = ArmorConfigValues.getKeys().toArray();
+        Object[] names = BulletConfigValues.getKeys().toArray();
         Arrays.sort(names); //TODO алфавит!
         // Общий словарь всего конфига
         HashMap<String, HashMap<String, Float>> items = new HashMap<>();
@@ -108,9 +108,9 @@ public class ArmorConfigFile {
         for(Object name : names) {
             if(((String) name).matches("\\w+:\\w+")) {    // Провкрка на: "minecraft:creeper"
                 HashMap<String, Float> innerMap = new HashMap<>();
-                String[] types = ArmorConfigValues.getTypes((String) name);
+                String[] types = BulletConfigValues.getTypes((String) name);
                 for (String type : types) {
-                    Float value = ArmorConfigValues.getValue((String) name, type);
+                    Float value = BulletConfigValues.getValue((String) name, type);
                     innerMap.put(type, value);
                 }
                 items.put((String) name, innerMap);
