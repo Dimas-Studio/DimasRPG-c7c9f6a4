@@ -23,5 +23,5 @@ jobs:
           VALIDATE_CHECKOV: false
           VALIDATE_BASH: false
           VALIDATE_BASH_EXEC: false
-          FILTER_REGEX_EXCLUDE: (.*workflows/.* .*old/.* .*old2/.* .*old3/.*)
+          FILTER_REGEX_INCLUDE: (.*common/.* .*fabric/.*)
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
