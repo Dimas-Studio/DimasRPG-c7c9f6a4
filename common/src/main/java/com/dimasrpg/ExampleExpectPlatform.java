@@ -1,3 +1,4 @@
+//@generated
 package com.dimasrpg;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
