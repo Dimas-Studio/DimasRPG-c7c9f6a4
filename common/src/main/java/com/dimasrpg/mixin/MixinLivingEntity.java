@@ -84,17 +84,17 @@ public abstract class MixinLivingEntity extends MixinEntity {
     private final float constToActuallyHurt2 = 3.4028235E37F;
 
     /**
-     * Метод нанесения урона жертве
+     * Метод нанесения урона жертве.
      * @param damageSource источник урона
-     * @param damage_raw количество урона
+     * @param damageRaw количество урона
      * @param ci CallbackInfo
      */
     @Inject(method = "actuallyHurt", at = @At("HEAD"), cancellable = true)
     protected void setDamageTo999(
             final DamageSource damageSource,
-            final float damage_raw,
+            final float damageRaw,
             final CallbackInfo ci) {
-        float damage = damage_raw;
+        float damage = damageRaw;
         if (!this.isInvulnerableTo(damageSource)) {
             damage = this.getDamageAfterArmorAbsorb(damageSource, damage);
             damage = this.getDamageAfterMagicAbsorb(damageSource, damage);
