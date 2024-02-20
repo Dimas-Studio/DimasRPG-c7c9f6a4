@@ -25,4 +25,5 @@ jobs:
           VALIDATE_BASH: false
           VALIDATE_BASH_EXEC: false
           IGNORE_GENERATED_FILES: true
+          VALIDATE_SHELL_SHFMT: false
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
