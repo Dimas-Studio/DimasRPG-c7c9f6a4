@@ -29,11 +29,11 @@ public class BulletConfigFile {
             return;
         }
         boolean one_config_is_valid = false;
-        File[] config_files = ConfigProvider.CONFDIR.resolve(mod_id).resolve(NAME).toFile().listFiles();
+        File[] config_files = ConfigProvider.getPath(mod_id, NAME).listFiles();
         if (config_files == null || config_files.length == 0) {
             DimasRPG.LOGGER.warn(NAME + " directory is empty, generate default file");
             BulletConfigValues.setDefaultConfigValues();
-            generateDefaultConfig(ConfigProvider.CONFDIR.resolve(mod_id).resolve(NAME).resolve("minecraft.json").toFile());
+            generateDefaultConfig(ConfigProvider.getPath(mod_id, "minecraft.json"));
             return;
         }
         for (File file : config_files) {

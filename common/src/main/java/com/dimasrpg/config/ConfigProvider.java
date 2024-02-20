@@ -19,7 +19,7 @@ public class ConfigProvider {
     private ConfigProvider() { }
 
     /**
-     * Путь до директории с конфигами
+     * Путь до директории с конфигами.
      */
     private static final Path CONFDIR = getConfigDirectory();
 
