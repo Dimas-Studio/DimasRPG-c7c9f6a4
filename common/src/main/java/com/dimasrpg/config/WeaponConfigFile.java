@@ -20,8 +20,8 @@ import com.google.gson.JsonElement;
 /**
  * Класс для работы с файлом конфига оружий.
  */
-public class WeaponConfigFile {
-    private WeaponConfigFile () { }
+public final class WeaponConfigFile {
+    private WeaponConfigFile() { }
 
     /**
      * Имя конфига.
@@ -45,7 +45,9 @@ public class WeaponConfigFile {
         boolean oneConfigIsValid = false;
         File[] configFiles = ConfigProvider.getPath(modId, NAME).listFiles();
         if (configFiles == null || configFiles.length == 0) {
-            DimasRPG.LOGGER.warn(NAME + " directory is empty, generate default file");
+            DimasRPG.LOGGER.warn(
+                    NAME + " directory is empty, generate default file"
+            );
             WeaponConfigValues.setDefaultConfigValues();
             generateDefaultConfig(ConfigProvider.getPath(
                     modId,
@@ -64,7 +66,8 @@ public class WeaponConfigFile {
                 continue;
             }
             oneConfigIsValid = true;
-            for (Map.Entry<String, JsonElement> entry : fileContent.entrySet()) {
+            for (Map.Entry<String, JsonElement> entry :
+                    fileContent.entrySet()) {
                 String name = entry.getKey();
                 Type pattern = new TypeToken<Map<String, Float>>() { }
                         .getType();
