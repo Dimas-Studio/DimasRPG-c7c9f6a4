@@ -26,5 +26,5 @@ jobs:
           VALIDATE_BASH_EXEC: false
           IGNORE_GENERATED_FILES: true
           VALIDATE_SHELL_SHFMT: false
-          LINTER_RULES_PATH: `config/lint`
+          LINTER_RULES_PATH: config/lint
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
