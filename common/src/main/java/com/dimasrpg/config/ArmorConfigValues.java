@@ -11,10 +11,7 @@ public class ArmorConfigValues implements ConfigValuesInterface{
         return CONTENT;
     }
     public static void setDefaultConfigValues() {
-        HashMap<String, HashMap<String, Float>> defaultContent = DefaultArmorValues.getContent();
-        for (String item: defaultContent.keySet()) {
-            CONTENT.put(item, defaultContent.get(item));
-        }
+        DefaultArmorValues.init();
     }
     public static void clearDefaultConfigValues() {
         CONTENT.clear();
