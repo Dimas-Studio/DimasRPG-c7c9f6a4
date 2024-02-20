@@ -15,7 +15,7 @@ import static com.dimasrpg.ExampleExpectPlatform.getConfigDirectory;
 /**
  * Класс для работы с файлом конфига.
  */
-public class ConfigProvider {
+public final class ConfigProvider {
     private ConfigProvider() { }
 
     /**
@@ -23,6 +23,12 @@ public class ConfigProvider {
      */
     private static final Path CONFDIR = getConfigDirectory();
 
+    /**
+     * Получает путь до файла в папке с конфигами
+     * @param modId Id мода
+     * @param file имя файла
+     * @return Путь до файла
+     */
     public static File getPath(final String modId, final String file) {
         return ConfigProvider.CONFDIR.resolve(modId).resolve(file).toFile();
     }
@@ -32,11 +38,13 @@ public class ConfigProvider {
      * @param path путь до директории
      * @return true, если директория существует или её удалось создать
      */
-    public static boolean checkAndCreateDir(Path path) {
+    public static boolean checkAndCreateDir(final Path path) {
         File folder = path.toFile();
         if (!folder.exists()) {
             if (folder.mkdirs()) {
-                DimasRPG.LOGGER.info("Folder " + path + " created successfully!");
+                DimasRPG.LOGGER.info(
+                        "Folder " + path + " created successfully!"
+                );
                 return true;
             }
             DimasRPG.LOGGER.error("Failed to create folder " + path);
@@ -46,7 +54,7 @@ public class ConfigProvider {
     }
 
     /**
-     * Инициализация директории конфигов с определённым типом
+     * Инициализация директории конфигов с определённым типом.
      * @param type тип конфига
      * @param modId ID мода
      * @return true в случае успешного создания

@@ -12,17 +12,17 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 
-public class ModItems {
+public final class ModItems {
     private ModItems() { }
 
-    /** Регистратор для новых креативных вкладок */
+    /** Регистратор для новых креативных вкладок. */
     public static final DeferredRegister<CreativeModeTab> TABS =
             DeferredRegister.create(
                     DimasRPG.MOD_ID,
                     Registries.CREATIVE_MODE_TAB
             );
     /**
-     * Вкладка мода
+     * Вкладка мода.
      */
     public static final RegistrySupplier<CreativeModeTab> MOD_TAB =
             TABS.register("tab", () ->
@@ -34,7 +34,7 @@ public class ModItems {
             );
 
 
-    /** Созаём регистратор, который определяет новые предметы как чать мода. */
+    /** Создаём регистратор, который определяет новые предметы как часть мода. */
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(DimasRPG.MOD_ID, Registries.ITEM);
     /** Новый предмет. */

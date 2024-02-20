@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-
+//@generated TODO:DELETE
 /**
  * Класс для работы с файлом конфига брони
  */
