@@ -4,231 +4,231 @@ public final class DefaultArmorValues {
     private DefaultArmorValues() { }
 
     /**
-     * Кожаный шлем, броня в ближнем бою
+     * Кожаный шлем, броня в ближнем бою.
      */
     private static final float LEATHER_HELMET_MELEE = 1.0F;
     /**
-     * Кожаный шлем, броня в дальнем бою
+     * Кожаный шлем, броня в дальнем бою.
      */
     private static final float LEATHER_HELMET_RANGE = 1.0F;
     /**
-     * Кожаный шлем, броня от магии
+     * Кожаный шлем, броня от магии.
      */
     private static final float LEATHER_HELMET_MAGIC = 1.0F;
     /**
-     * Кожаный нагрудник, броня в ближнем бою
+     * Кожаный нагрудник, броня в ближнем бою.
      */
     private static final float LEATHER_CHESTPLATE_MELEE =  3.0F;
     /**
-     * Кожаный нагрудник, броня в дальнем бою
+     * Кожаный нагрудник, броня в дальнем бою.
      */
     private static final float LEATHER_CHESTPLATE_RANGE =  3.0F;
     /**
-     * Кожаный нагрудник, броня от магии
+     * Кожаный нагрудник, броня от магии.
      */
     private static final float LEATHER_CHESTPLATE_MAGIC =  3.0F;
     /**
-     * Кожаные штаны, броня в ближнем бою
+     * Кожаные штаны, броня в ближнем бою.
      */
     private static final float LEATHER_LEGGINGS_MELEE =  2.0F;
     /**
-     * Кожаные штаны, броня в дальнем бою
+     * Кожаные штаны, броня в дальнем бою.
      */
     private static final float LEATHER_LEGGINGS_RANGE =  2.0F;
     /**
-     * Кожаные штаны, броня от магии
+     * Кожаные штаны, броня от магии.
      */
     private static final float LEATHER_LEGGINGS_MAGIC =  2.0F;
     /**
-     * Кожаные ботинки, броня в ближнем бою
+     * Кожаные ботинки, броня в ближнем бою.
      */
     private static final float LEATHER_BOOTS_MELEE =  1.0F;
     /**
-     * Кожаные ботинки, броня в дальнем бою
+     * Кожаные ботинки, броня в дальнем бою.
      */
     private static final float LEATHER_BOOTS_RANGE =  1.0F;
     /**
-     * Кожаные ботинки, броня от магии
+     * Кожаные ботинки, броня от магии.
      */
     private static final float LEATHER_BOOTS_MAGIC =  1.0F;
     /**
-     * Кольчужный шлем, броня в ближнем бою
+     * Кольчужный шлем, броня в ближнем бою.
      */
     private static final float CHAINMAIL_HELMET_MELEE =  2.0F;
     /**
-     * Кольчужный шлем, броня в дальнем бою
+     * Кольчужный шлем, броня в дальнем бою.
      */
     private static final float CHAINMAIL_HELMET_RANGE =  2.0F;
     /**
-     * Кольчужный шлем, броня от магии
+     * Кольчужный шлем, броня от магии.
      */
     private static final float CHAINMAIL_HELMET_MAGIC =  2.0F;
     /**
-     * Кольчужный нагрудник, броня в ближнем бою
+     * Кольчужный нагрудник, броня в ближнем бою.
      */
     private static final float CHAINMAIL_CHESTPLATE_MELEE =  6.0F;
     /**
-     * Кольчужный нагрудник, броня в дальнем бою
+     * Кольчужный нагрудник, броня в дальнем бою.
      */
     private static final float CHAINMAIL_CHESTPLATE_RANGE =  6.0F;
     /**
-     * Кольчужный нагрудник, броня от магии
+     * Кольчужный нагрудник, броня от магии.
      */
     private static final float CHAINMAIL_CHESTPLATE_MAGIC =  6.0F;
     /**
-     * Кольчужные поножи, броня в ближнем бою
+     * Кольчужные поножи, броня в ближнем бою.
      */
     private static final float CHAINMAIL_LEGGINGS_MELEE =  4.0F;
     /**
-     * Кольчужные поножи, броня в дальнем бою
+     * Кольчужные поножи, броня в дальнем бою.
      */
     private static final float CHAINMAIL_LEGGINGS_RANGE =  4.0F;
     /**
-     * Кольчужные поножи, броня от магии
+     * Кольчужные поножи, броня от магии.
      */
     private static final float CHAINMAIL_LEGGINGS_MAGIC =  4.0F;
     /**
-     * Кольчужные ботинки, броня в ближнем бою
+     * Кольчужные ботинки, броня в ближнем бою.
      */
     private static final float CHAINMAIL_BOOTS_MELEE =  1.0F;
     /**
-     * Кольчужные ботинки, броня в дальнем бою
+     * Кольчужные ботинки, броня в дальнем бою.
      */
     private static final float CHAINMAIL_BOOTS_RANGE =  1.0F;
     /**
-     * Кольчужные ботинки, броня от магии
+     * Кольчужные ботинки, броня от магии.
      */
     private static final float CHAINMAIL_BOOTS_MAGIC =  1.0F;
     /**
-     * Железный шлем, броня в ближнем бою
+     * Железный шлем, броня в ближнем бою.
      */
     private static final float IRON_HELMET_MELEE =  2.0F;
     /**
-     * Железный шлем, броня в дальнем бою
+     * Железный шлем, броня в дальнем бою.
      */
     private static final float IRON_HELMET_RANGE =  2.0F;
     /**
-     * Железный шлем, броня от магии
+     * Железный шлем, броня от магии.
      */
     private static final float IRON_HELMET_MAGIC =  2.0F;
     /**
-     * Железный нагрудник, броня в ближнем бою
+     * Железный нагрудник, броня в ближнем бою.
      */
     private static final float IRON_CHESTPLATE_MELEE =  6.0F;
     /**
-     * Железный нагрудник, броня в дальнем бою
+     * Железный нагрудник, броня в дальнем бою.
      */
     private static final float IRON_CHESTPLATE_RANGE =  6.0F;
     /**
-     * Железный нагрудник, броня от магии
+     * Железный нагрудник, броня от магии.
      */
     private static final float IRON_CHESTPLATE_MAGIC =  6.0F;
     /**
-     * Железные поножи, броня в ближнем бою
+     * Железные поножи, броня в ближнем бою.
      */
     private static final float IRON_LEGGINGS_MELEE =  5.0F;
     /**
-     * Железные поножи, броня в дальнем бою
+     * Железные поножи, броня в дальнем бою.
      */
     private static final float IRON_LEGGINGS_RANGE =  5.0F;
     /**
-     * Железные поножи, броня от магии
+     * Железные поножи, броня от магии.
      */
     private static final float IRON_LEGGINGS_MAGIC =  5.0F;
     /**
-     * Железные ботинки, броня в ближнем бою
+     * Железные ботинки, броня в ближнем бою.
      */
     private static final float IRON_BOOTS_MELEE =  2.0F;
     /**
-     * Железные ботинки, броня в дальнем бою
+     * Железные ботинки, броня в дальнем бою.
      */
     private static final float IRON_BOOTS_RANGE =  2.0F;
     /**
-     * Железные ботинки, броня от магии
+     * Железные ботинки, броня от магии.
      */
     private static final float IRON_BOOTS_MAGIC =  2.0F;
     /**
-     * Алмазный шлем, броня в ближнем бою
+     * Алмазный шлем, броня в ближнем бою.
      */
     private static final float DIAMOND_HELMET_MELEE =  3.0F;
     /**
-     * Алмазный шлем, броня в дальнем бою
+     * Алмазный шлем, броня в дальнем бою.
      */
     private static final float DIAMOND_HELMET_RANGE =  3.0F;
     /**
-     * Алмазный шлем, броня от магии
+     * Алмазный шлем, броня от магии.
      */
     private static final float DIAMOND_HELMET_MAGIC =  3.0F;
     /**
-     * Алмазный нагрудник, броня в ближнем бою
+     * Алмазный нагрудник, броня в ближнем бою.
      */
     private static final float DIAMOND_CHESTPLATE_MELEE =  8.0F;
     /**
-     * Алмазный нагрудник, броня в дальнем бою
+     * Алмазный нагрудник, броня в дальнем бою.
      */
     private static final float DIAMOND_CHESTPLATE_RANGE =  8.0F;
     /**
-     * Алмазный нагрудник, броня от магии
+     * Алмазный нагрудник, броня от магии.
      */
     private static final float DIAMOND_CHESTPLATE_MAGIC =  8.0F;
     /**
-     * Алмазные поножи, броня в ближнем бою
+     * Алмазные поножи, броня в ближнем бою.
      */
     private static final float DIAMOND_LEGGINGS_MELEE =  6.0F;
     /**
-     * Алмазные поножи, броня в дальнем бою
+     * Алмазные поножи, броня в дальнем бою.
      */
     private static final float DIAMOND_LEGGINGS_RANGE =  6.0F;
     /**
-     * Алмазные поножи, броня от магии
+     * Алмазные поножи, броня от магии.
      */
     private static final float DIAMOND_LEGGINGS_MAGIC =  6.0F;
     /**
-     * Алмазные ботинки, броня в ближнем бою
+     * Алмазные ботинки, броня в ближнем бою.
      */
     private static final float DIAMOND_BOOTS_MELEE =  3.0F;
     /**
-     * Алмазные ботинки, броня в дальнем бою
+     * Алмазные ботинки, броня в дальнем бою.
      */
     private static final float DIAMOND_BOOTS_RANGE =  3.0F;
     /**
-     * Алмазные ботинки, броня от магии
+     * Алмазные ботинки, броня от магии.
      */
     private static final float DIAMOND_BOOTS_MAGIC =  3.0F;
     /**
-     * Золотой шлем, броня в ближнем бою
+     * Золотой шлем, броня в ближнем бою.
      */
     private static final float GOLDEN_HELMET_MELEE =  2.0F;
     /**
-     * Золотой шлем, броня в дальнем бою
+     * Золотой шлем, броня в дальнем бою.
      */
     private static final float GOLDEN_HELMET_RANGE =  2.0F;
     /**
-     * Золотой шлем, броня от магии
+     * Золотой шлем, броня от магии.
      */
     private static final float GOLDEN_HELMET_MAGIC =  2.0F;
     /**
-     * Золотой нагрудник, броня в ближнем бою
+     * Золотой нагрудник, броня в ближнем бою.
      */
     private static final float GOLDEN_CHESTPLATE_MELEE =  0.0F;
     /**
-     * Золотой нагрудник, броня в дальнем бою
+     * Золотой нагрудник, броня в дальнем бою.
      */
     private static final float GOLDEN_CHESTPLATE_RANGE =  0.0F;
     /**
-     * Золотой нагрудник, броня от магии
+     * Золотой нагрудник, броня от магии.
      */
     private static final float GOLDEN_CHESTPLATE_MAGIC =  0.0F;
     /**
-     * Золотые поножи, броня в ближнем бою
+     * Золотые поножи, броня в ближнем бою.
      */
     private static final float GOLDEN_LEGGINGS_MELEE =  3.0F;
     /**
-     * Золотые поножи, броня в дальнем бою
+     * Золотые поножи, броня в дальнем бою.
      */
     private static final float GOLDEN_LEGGINGS_RANGE =  3.0F;
     /**
-     * Золотые поножи, броня от магии
+     * Золотые поножи, броня от магии.
      */
     private static final float GOLDEN_LEGGINGS_MAGIC =  3.0F;
     /**
