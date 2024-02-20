@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
-public abstract class MixinLivingEntity extends MixinEntity{
+public abstract class MixinLivingEntity extends MixinEntity {
 
     /**
      * Количество урона после поглощения брони.
@@ -23,7 +23,8 @@ public abstract class MixinLivingEntity extends MixinEntity{
      * @return Количество урона после поглощения брони
      */
     @Shadow
-    protected abstract float getDamageAfterArmorAbsorb(DamageSource damageSource, float f);
+    protected abstract float getDamageAfterArmorAbsorb(
+            DamageSource damageSource, float f);
 
     /**
      * Количество урона после поглощения магией.
@@ -32,7 +33,8 @@ public abstract class MixinLivingEntity extends MixinEntity{
      * @return Количество урона после поглощения магией
      */
     @Shadow
-    protected abstract float getDamageAfterMagicAbsorb(DamageSource damageSource, float f);
+    protected abstract float getDamageAfterMagicAbsorb(
+            DamageSource damageSource, float f);
 
     /**
      * Получает количество жёлтых сердец (поглощение).
@@ -70,19 +72,13 @@ public abstract class MixinLivingEntity extends MixinEntity{
     public abstract float getHealth();
 
     /**
-     * Константа для каких-то вычислений
+     * Константа для каких-то вычислений.
      * (взято из стандартного кода)
      */
     private final float constToActuallyHurt1 = 10.0F;
 
     /**
-     * Константа для каких-то вычислений
-     * (взято из стандартного кода)
-     */
-    private final float constToActuallyHurt2 = 3.4028235E37F;
-
-    /**
-     * Метод нанесения урона жертве
+     * Метод нанесения урона жертве.
      * @param damageSource источник урона
      * @param damage количество урона
      * @param ci CallbackInfo
@@ -92,6 +88,7 @@ public abstract class MixinLivingEntity extends MixinEntity{
             final DamageSource damageSource,
             float damage,
             final CallbackInfo ci) {
+        float constToActuallyHurt2 = 3.4028235E37F;
         if (!this.isInvulnerableTo(damageSource)) {
             damage = this.getDamageAfterArmorAbsorb(damageSource, damage);
             damage = this.getDamageAfterMagicAbsorb(damageSource, damage);
@@ -99,6 +96,11 @@ public abstract class MixinLivingEntity extends MixinEntity{
             damage = Math.max(damage - this.getAbsorptionAmount(), 0.0F);
             this.setAbsorptionAmount(this.getAbsorptionAmount() - (g - damage));
             float h = g - damage;
+            /**
+             * Константа для каких-то вычислений
+             * (взято из стандартного кода)
+             */
+
             if (h > 0.0F && h < constToActuallyHurt2) {
                 Entity var6 = damageSource.getEntity();
                 if (var6 instanceof ServerPlayer) {

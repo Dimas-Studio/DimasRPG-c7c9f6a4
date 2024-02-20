@@ -10,6 +10,10 @@ public interface ConfigValuesInterface {
      */
     private static void put(String name, String type, float value) { }
     private static void clearDefaultConfigValues() { }
-    private static float getValue(String name, String type) { return 0.0F; }
-    private static String[] getTypes() { return new String[0]; }
+    private static float getValue(String name, String type) {
+        return 0.0F;
+    }
+    private static String[] getTypes() {
+        return new String[0];
+    }
 }
