@@ -10,16 +10,16 @@ import org.slf4j.event.Level;
 
 import java.util.function.Supplier;
 
-public class DimasRPG {
-    private DimasRPG() {}
+public final class DimasRPG {
+    private DimasRPG() { }
 
     /**
-     * ID мода
+     * ID мода.
      */
     public static final String MOD_ID = "dimasrpg";
 
     /**
-     * Инструмент для логирования событий в консоль
+     * Инструмент для логирования событий в консоль.
      */
     public static final Logger LOGGER = LogUtils.getLogger();
 
