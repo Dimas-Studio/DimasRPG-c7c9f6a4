@@ -5,15 +5,26 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 
 public class Debug {
-    public static void printToChat(String S, ChatFormatting ... p_130945_){
-        if (Minecraft.getInstance().player != null)
+    private Debug(){}
+    /**
+     * Выводит сообщения в чат для отладки.
+     * Версия метода c форматированием.
+     */
+    public static void printToChat(final String s, final ChatFormatting chatFormatting) {
+        if (Minecraft.getInstance().player != null) {
             Minecraft.getInstance().player.sendSystemMessage(
-                    Component.literal(S).withStyle(p_130945_));
+                    Component.literal(s).withStyle(chatFormatting));
+        }
     }
 
-    public static void printToChat(String S){
-        if (Minecraft.getInstance().player != null)
+    /**
+     * Выводит сообщения в чат для отладки.
+     * Версия метода без форматирования.
+     */
+    public static void printToChat(final String s) {
+        if (Minecraft.getInstance().player != null) {
             Minecraft.getInstance().player.sendSystemMessage(
-                    Component.literal(S));
+                    Component.literal(s));
+        }
     }
 }
