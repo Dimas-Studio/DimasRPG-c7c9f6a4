@@ -78,17 +78,23 @@ public abstract class MixinLivingEntity extends MixinEntity {
     private final float constToActuallyHurt1 = 10.0F;
 
     /**
-     * Метод нанесения урона жертве.
+     * Константа для каких-то вычислений.
+     * (взято из стандартного кода)
+     */
+    private final float constToActuallyHurt2 = 3.4028235E37F;
+
+    /**
+     * Метод нанесения урона жертве
      * @param damageSource источник урона
-     * @param damage количество урона
+     * @param damage_raw количество урона
      * @param ci CallbackInfo
      */
     @Inject(method = "actuallyHurt", at = @At("HEAD"), cancellable = true)
     protected void setDamageTo999(
             final DamageSource damageSource,
-            float damage,
+            final float damage_raw,
             final CallbackInfo ci) {
-        float constToActuallyHurt2 = 3.4028235E37F;
+        float damage = damage_raw;
         if (!this.isInvulnerableTo(damageSource)) {
             damage = this.getDamageAfterArmorAbsorb(damageSource, damage);
             damage = this.getDamageAfterMagicAbsorb(damageSource, damage);
@@ -96,11 +102,6 @@ public abstract class MixinLivingEntity extends MixinEntity {
             damage = Math.max(damage - this.getAbsorptionAmount(), 0.0F);
             this.setAbsorptionAmount(this.getAbsorptionAmount() - (g - damage));
             float h = g - damage;
-            /**
-             * Константа для каких-то вычислений
-             * (взято из стандартного кода)
-             */
-
             if (h > 0.0F && h < constToActuallyHurt2) {
                 Entity var6 = damageSource.getEntity();
                 if (var6 instanceof ServerPlayer) {
