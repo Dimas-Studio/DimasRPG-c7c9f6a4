@@ -68,7 +68,7 @@ public class CalculateDamage {
             return damage;
         }
         if (attacking instanceof LivingEntity) {
-            //TODO Else: у враждебных существ урон зависит от сложности
+            //Else: у враждебных существ урон зависит от сложности
             damage = 0;
             damage += new DefaultEntityDamage().get((LivingEntity) attacking);
             damage += new DefaultItemDamage().get(attacking.getHandSlots().iterator().next().getItem());

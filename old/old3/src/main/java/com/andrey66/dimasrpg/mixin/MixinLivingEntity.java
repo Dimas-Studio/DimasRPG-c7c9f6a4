@@ -149,7 +149,7 @@ public abstract class MixinLivingEntity extends MixinEntity{
 
     // Метод для изминения вычислений урона
     @Inject(method = "actuallyHurt", at = @At("HEAD"), cancellable = true)
-    protected void reCalculateDamage(DamageSource damageSource, float damage, CallbackInfo ci) { // TODO: Учесть логику LivingEntity.hurt()
+    protected void reCalculateDamage(DamageSource damageSource, float damage, CallbackInfo ci) { // Учесть логику LivingEntity.hurt()
         if (!this.isInvulnerableTo(damageSource)) {
             int a = Debug.a();
             float vanilaDamage = 0;

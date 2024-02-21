@@ -26,7 +26,7 @@ public class ConfigArmorValues {
     // метод добавления нового поля конифга
     public static void put(String name, HashMap<String, Float> values) {
         HashMap<String, Float> innerMap = new HashMap<>();
-        if (CONFIG_SPEC.containsKey(name)) { //TODO: Возможно лишнее
+        if (CONFIG_SPEC.containsKey(name)) { //Возможно лишнее
             innerMap = CONFIG_SPEC.get(name);
         }
         for (Map.Entry<String, Float> entry : values.entrySet()) {

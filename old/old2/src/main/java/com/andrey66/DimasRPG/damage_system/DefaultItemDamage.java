@@ -32,7 +32,7 @@ public class DefaultItemDamage {
             return ((DiggerItem)item).getAttackDamage();
         }
 
-        //TODO Только для админов
+        //Только для админов
         if (Minecraft.getInstance().player != null) {
             Minecraft.getInstance().player.sendSystemMessage(
                     Component.literal("WARNING: " + item.getDescriptionId() + " don't registered!").withStyle(ChatFormatting.YELLOW));

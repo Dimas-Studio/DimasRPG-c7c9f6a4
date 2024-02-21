@@ -24,7 +24,7 @@ public class DefaultEntityDamage {
 
 
 
-        //TODO Только для админов
+        //Только для админов
         if (Minecraft.getInstance().player != null) {
             Minecraft.getInstance().player.sendSystemMessage(
                     Component.literal("WARNING: " + entity.getEncodeId() + " don't registered!").withStyle(ChatFormatting.YELLOW));

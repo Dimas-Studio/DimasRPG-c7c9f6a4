@@ -19,7 +19,7 @@ public class ModItems{
     public static final RegistryObject<Item> LEVITATION_ROAD = ITEMS.register("levitation_road",
             () -> new LevitationRoad(new Item.Properties().tab(ModCreativeModeTab.DIMAS_RPG)));
 
-    // TODO: Create check entity type wand to creative
+    // Create check entity type wand to creative
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

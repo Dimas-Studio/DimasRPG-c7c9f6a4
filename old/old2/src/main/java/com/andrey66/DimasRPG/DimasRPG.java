@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 @Mod(DimasRPG.MOD_ID)
 public class DimasRPG
 {
-    // TODO: COMMENTS!
     public static final String MOD_ID = "dimas_rpg";
     private static final Logger LOGGER = LogUtils.getLogger();
 
