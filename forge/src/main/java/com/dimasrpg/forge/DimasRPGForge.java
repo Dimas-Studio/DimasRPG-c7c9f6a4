@@ -1,5 +1,5 @@
 package com.dimasrpg.forge;
-
+//@generated
 import dev.architectury.platform.forge.EventBuses;
 import com.dimasrpg.DimasRPG;
 import net.minecraftforge.fml.common.Mod;

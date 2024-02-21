@@ -8,8 +8,19 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity {
+
+    /**
+     * Проверка на невосприимчивость урона.
+     * @param damageSource источник урона
+     * @return true, если у существа есть иммунитет
+     */
     @Shadow
-    public abstract boolean isInvulnerableTo(DamageSource p_20122_);
+    public abstract boolean isInvulnerableTo(DamageSource damageSource);
+
+    /**
+     * Что-то связанное с эвентами из стандартного кода.
+     * @param gameEvent что-то связанное с эвентами
+     */
     @Shadow
     public abstract void gameEvent(GameEvent gameEvent);
 }

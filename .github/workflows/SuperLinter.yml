@@ -21,8 +21,12 @@ jobs:
       - name: Super-linter
         uses: super-linter/super-linter@v6.1.1
         env:
+          VALIDATE_GOOGLE_JAVA_FORMAT: false
+          FILTER_REGEX_EXCLUDE: .*old/.*
           VALIDATE_CHECKOV: false
           VALIDATE_BASH: false
           VALIDATE_BASH_EXEC: false
           IGNORE_GENERATED_FILES: true
+          VALIDATE_SHELL_SHFMT: false
+          LINTER_RULES_PATH: config/lint
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

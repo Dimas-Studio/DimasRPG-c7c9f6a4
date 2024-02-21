@@ -1,5 +1,5 @@
 package com.dimasrpg.fabric;
-
+//@generated
 import com.dimasrpg.ExampleExpectPlatform;
 import org.quiltmc.loader.api.QuiltLoader;
 

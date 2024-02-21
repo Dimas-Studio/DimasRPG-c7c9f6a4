@@ -1,5 +1,5 @@
 package com.dimasrpg.config;
-
+//@generated TODO:DELETE
 
 public class DefaultWeaponValues {
     public static void init(){

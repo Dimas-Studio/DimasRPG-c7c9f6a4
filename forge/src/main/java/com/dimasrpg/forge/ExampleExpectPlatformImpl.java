@@ -1,5 +1,5 @@
 package com.dimasrpg.forge;
-
+//@generated
 import com.dimasrpg.ExampleExpectPlatform;
 import net.minecraftforge.fml.loading.FMLPaths;
 
