@@ -3,7 +3,7 @@ package com.dimasrpg.config;
 import java.util.HashMap;
 import java.util.Set;
 //@generated TODO:DELETE
-public class WeaponConfigValues implements ConfigValuesInterface{
+public class WeaponConfigValues{
     // Хрант в себе словарь из конфиг файла
     private static final HashMap<String, HashMap<String, Float>> CONTENT = new HashMap<>();
 

@@ -3,7 +3,7 @@ package com.dimasrpg.config;
 import java.util.HashMap;
 import java.util.Set;
 //@generated TODO:DELETE
-public class BulletConfigValues implements ConfigValuesInterface{
+public class BulletConfigValues {
     // Хрант в себе словарь из конфиг файла
     private static final HashMap<String, HashMap<String, Float>> CONTENT = new HashMap<>();
 
@@ -42,6 +42,7 @@ public class BulletConfigValues implements ConfigValuesInterface{
         }
         return null;
     }
+
     // Метод получения множества ключей (имён предметов) из конфига
     public static Set<String> getKeys() {
         return CONTENT.keySet();
