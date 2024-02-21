@@ -1,5 +1,5 @@
 package com.dimasrpg.config;
-
+//@generated TODO:DELETE
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -66,8 +66,8 @@ public final class WeaponConfigFile {
                 continue;
             }
             oneConfigIsValid = true;
-            for (Map.Entry<String, JsonElement> entry :
-                    fileContent.entrySet()) {
+            for (Map.Entry<String, JsonElement> entry
+                    : fileContent.entrySet()) {
                 String name = entry.getKey();
                 Type pattern = new TypeToken<Map<String, Float>>() { }
                         .getType();

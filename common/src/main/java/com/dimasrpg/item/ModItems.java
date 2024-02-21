@@ -34,7 +34,9 @@ public final class ModItems {
             );
 
 
-    /** Создаём регистратор, который определяет новые предметы как часть мода. */
+    /**
+     * Создаём регистратор, который определяет новые предметы как часть мода.
+     */
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(DimasRPG.MOD_ID, Registries.ITEM);
     /** Новый предмет. */

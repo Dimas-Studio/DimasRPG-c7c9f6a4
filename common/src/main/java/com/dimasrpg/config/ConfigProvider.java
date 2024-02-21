@@ -24,7 +24,7 @@ public final class ConfigProvider {
     private static final Path CONFDIR = getConfigDirectory();
 
     /**
-     * Получает путь до файла в папке с конфигами
+     * Получает путь до файла в папке с конфигами.
      * @param modId Id мода
      * @param file имя файла
      * @return Путь до файла
@@ -59,7 +59,8 @@ public final class ConfigProvider {
      * @param modId ID мода
      * @return true в случае успешного создания
      */
-    public static boolean initConfigTypeFolder(final String type, final String modId) {
+    public static boolean initConfigTypeFolder(
+            final String type, final String modId) {
         Path modConfigs = ConfigProvider.CONFDIR.resolve(modId);
         if (!checkAndCreateDir(modConfigs)) {
             return false;
