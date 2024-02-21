@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ConfigCheckerItem extends Item {
     /**
-     * КОнструктор для предметов типа ConfigCheckerItem
+     * Конструктор для предметов типа ConfigCheckerItem.
      * @param properties свойства предмета
      */
     public ConfigCheckerItem(final Properties properties) {

@@ -1,5 +1,5 @@
 package com.dimasrpg.config;
-
+//@generated TODO:DELETE
 import com.dimasrpg.DimasRPG;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.*;

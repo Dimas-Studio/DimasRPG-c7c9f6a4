@@ -1,5 +1,5 @@
 package com.dimasrpg.config;
-
+//@generated TODO:DELETE
 import java.util.HashMap;
 import java.util.Set;
 
