@@ -6,11 +6,13 @@ import java.util.Set;
 public final class ArmorConfigValues implements ConfigValuesInterface {
     private ArmorConfigValues() { }
 
+
     /**
      * Хранит в себе словарь из конфиг файла.
      */
     private static final HashMap<String, HashMap<String, Float>> CONTENT
             = new HashMap<>();
+
 
     /**
      * Получает словарь CONTENT.
@@ -20,6 +22,7 @@ public final class ArmorConfigValues implements ConfigValuesInterface {
         return CONTENT;
     }
 
+
     /**
      * Устанавливает значения по умолчанию.
      */
@@ -27,12 +30,14 @@ public final class ArmorConfigValues implements ConfigValuesInterface {
         DefaultArmorValues.init();
     }
 
+
     /**
      * Очищает значения в словаре.
      */
     public static void clearDefaultConfigValues() {
         CONTENT.clear();
     }
+
 
     /**
      * Добавляет новый предмет в конфиг-словарь.
@@ -52,10 +57,11 @@ public final class ArmorConfigValues implements ConfigValuesInterface {
         CONTENT.put(name, innerMap);
     }
 
+
     /**
      * Получает массив типов защиты предмета.
      * @param name название предмета
-     * @return массив типов урона
+     * @return массив типов защиты
      */
     public static String[] getTypes(final String name) {
         if (CONTENT.containsKey(name)) {
@@ -66,6 +72,7 @@ public final class ArmorConfigValues implements ConfigValuesInterface {
         }
         return null;
     }
+
 
     /**
      * Получает количество защиты определённого типа указанного предмета.
@@ -81,7 +88,7 @@ public final class ArmorConfigValues implements ConfigValuesInterface {
         }
         return null;
     }
-    // Метод получения множества ключей (имён предметов) из конфига
+
 
     /**
      * Получает множество всех предметов в конфиг-словаре.
@@ -91,7 +98,6 @@ public final class ArmorConfigValues implements ConfigValuesInterface {
         return CONTENT.keySet();
     }
 
-    // Метод проверки ключа (имени) на существование
 
     /**
      * Проверяет предмет на существование в конфиг-словаре.

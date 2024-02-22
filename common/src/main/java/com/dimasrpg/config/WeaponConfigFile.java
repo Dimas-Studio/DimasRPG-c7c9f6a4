@@ -23,16 +23,20 @@ import com.google.gson.JsonElement;
 public final class WeaponConfigFile {
     private WeaponConfigFile() { }
 
+
     /**
      * Имя конфига.
      */
     public static final String NAME = "weapon";
+
+
     /**
      * Gson переменная для конвертации словаря в json строку и наоборот.
      */
     public static final Gson GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .setPrettyPrinting().create();
+
 
     /**
      * Инициализация конфига для оружий.
@@ -128,6 +132,7 @@ public final class WeaponConfigFile {
         }
         return true;
     }
+
 
     /**
      * Создание конфига по умолчанию.

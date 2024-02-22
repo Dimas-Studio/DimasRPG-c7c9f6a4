@@ -15,22 +15,27 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
  * Класс для работы с файлом конфига сущности.
  */
 public final class BulletConfigFile {
     private BulletConfigFile() { }
 
+
     /**
      * Имя конфига.
      */
     private static final String NAME = "bullet";
+
+
     /**
      * Gson переменная для конвертации словаря в json строку и наоборот.
      */
     public static final Gson GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .setPrettyPrinting().create();
+
 
     /**
      * Инициализация конфига (вызывается из основного класса мода).

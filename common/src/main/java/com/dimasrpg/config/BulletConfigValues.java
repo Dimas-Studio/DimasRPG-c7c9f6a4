@@ -5,11 +5,15 @@ import java.util.Set;
 
 public final class BulletConfigValues implements ConfigValuesInterface {
     private BulletConfigValues() { }
+
+
     /**
      * Хранит в себе словарь из конфиг файла.
      */
     private static final HashMap<String, HashMap<String, Float>> CONTENT =
             new HashMap<>();
+
+
     /**
      * Получает словарь CONTENT.
      * @return словарь CONTENT
@@ -17,18 +21,24 @@ public final class BulletConfigValues implements ConfigValuesInterface {
     public static HashMap<String, HashMap<String, Float>> getDict() {
         return CONTENT;
     }
+
+
     /**
      * Устанавливает значения по умолчанию.
      */
     public static void setDefaultConfigValues() {
         DefaultBulletValues.init();
     }
+
+
     /**
      * Очищает значения в словаре.
      */
     public static void clearDefaultConfigValues() {
         CONTENT.clear();
     }
+
+
     /**
      * Добавляет новую сущность в конфиг-словарь.
      * @param name название сущности
@@ -46,6 +56,8 @@ public final class BulletConfigValues implements ConfigValuesInterface {
         innerMap.put(type, value);
         CONTENT.put(name, innerMap);
     }
+
+
     /**
      * Получает массив типов урона сущности.
      * @param name название предмета
@@ -60,6 +72,8 @@ public final class BulletConfigValues implements ConfigValuesInterface {
         }
         return null;
     }
+
+
     /**
      * Получает количество урона определённого типа указанного предмета.
      * @param name название предмета
@@ -74,7 +88,8 @@ public final class BulletConfigValues implements ConfigValuesInterface {
         }
         return null;
     }
-    // Метод получения множества ключей (имён предметов) из конфига
+
+
     /**
      * Получает множество всех сущностией в конфиг-словаре.
      * @return множество предметов
@@ -82,7 +97,8 @@ public final class BulletConfigValues implements ConfigValuesInterface {
     public static Set<String> getKeys() {
         return CONTENT.keySet();
     }
-    // Метод проверки ключа (имени) на существование
+
+
     /**
      * Проверяет сущность на существование в конфиг-словаре.
      * @param name название предмета
