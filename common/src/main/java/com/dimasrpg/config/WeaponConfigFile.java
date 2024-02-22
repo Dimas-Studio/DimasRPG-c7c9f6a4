@@ -1,5 +1,5 @@
 package com.dimasrpg.config;
-//@generated TODO:DELETE
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

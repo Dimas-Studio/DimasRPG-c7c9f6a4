@@ -65,7 +65,8 @@ public final class BulletConfigFile {
             for (Map.Entry<String, JsonElement> entry
                     : fileContent.entrySet()) {
                 String name = entry.getKey();
-                Type pattern = new TypeToken<Map<String, Float>>() { } .getType();
+                Type pattern = new TypeToken<Map<String, Float>>() { }
+                        .getType();
                 Map<String, Float> innerMap = new Gson().fromJson(
                         entry.getValue(), pattern);
                 for (String type : innerMap.keySet()) {
@@ -85,7 +86,8 @@ public final class BulletConfigFile {
         for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
             try {
                 String name = entry.getKey();
-                Type pattern = new TypeToken<Map<String, Float>>() { } .getType();
+                Type pattern = new TypeToken<Map<String, Float>>() { }
+                        .getType();
                 Map<String, Float> innerMap =
                         new Gson().fromJson(entry.getValue(), pattern);
                 for (String type : innerMap.keySet()) {
