@@ -24,7 +24,7 @@ public final class BulletConfigFile {
     /**
      * Имя конфига.
      */
-    private final static String NAME = "bullet";
+    private static final String NAME = "bullet";
     /**
      * Gson переменная для конвертации словаря в json строку и наоборот.
      */
@@ -52,19 +52,20 @@ public final class BulletConfigFile {
             return;
         }
         for (File file : configFiles) {
-            JsonObject file_content = ConfigProvider.readConfig(file);
-            if (file_content == null) {
+            JsonObject fileContent = ConfigProvider.readConfig(file);
+            if (fileContent == null) {
                 DimasRPG.LOGGER.warn(file + " is empty!");
                 continue;
             }
-            if (!validateConfig(file_content)) {
+            if (!validateConfig(fileContent)) {
                 DimasRPG.LOGGER.warn(file + " is invalid!");
                 continue;
             }
             oneConfigIsValid = true;
-            for (Map.Entry<String, JsonElement> entry : file_content.entrySet()) {
+            for (Map.Entry<String, JsonElement> entry
+                    : fileContent.entrySet()) {
                 String name = entry.getKey();
-                Type pattern = new TypeToken<Map<String, Float>>() {}.getType();
+                Type pattern = new TypeToken<Map<String, Float>>() { } .getType();
                 Map<String, Float> innerMap = new Gson().fromJson(
                         entry.getValue(), pattern);
                 for (String type : innerMap.keySet()) {
@@ -80,13 +81,13 @@ public final class BulletConfigFile {
         }
     }
 
-    private static Boolean validateConfig(JsonObject json) {
+    private static Boolean validateConfig(final JsonObject json) {
         for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
             try {
                 String name = entry.getKey();
-                Type pattern = new TypeToken<Map<String, Float>>() {}.getType();
-                Map<String, Float> innerMap = new Gson().fromJson(
-                        entry.getValue(), pattern);
+                Type pattern = new TypeToken<Map<String, Float>>() { } .getType();
+                Map<String, Float> innerMap =
+                        new Gson().fromJson(entry.getValue(), pattern);
                 for (String type : innerMap.keySet()) {
                     Float value = innerMap.get(type);
                     BulletConfigValues.put(name, type, value);
@@ -116,7 +117,7 @@ public final class BulletConfigFile {
         return true;
     }
 
-    private static void generateDefaultConfig(File file) {
+    private static void generateDefaultConfig(final File file) {
         // Сортировка переменных по умолчанию для удобства чтения
         Object[] names = BulletConfigValues.getKeys().toArray();
         Arrays.sort(names); //TODO алфавит!

@@ -1,6 +1,7 @@
 package com.dimasrpg.item.custom;
 
 import com.dimasrpg.Debug;
+import com.dimasrpg.config.BulletConfigValues;
 import com.dimasrpg.config.WeaponConfigValues;
 import com.dimasrpg.config.ArmorConfigValues;
 import net.minecraft.world.InteractionHand;
@@ -31,7 +32,10 @@ public class ConfigCheckerItem extends Item {
         if (!level.isClientSide()) {
             Debug.printToChat("Hello world!");
             Debug.printToChat(WeaponConfigValues.getDict().toString());
+            Debug.printToChat("");
             Debug.printToChat(ArmorConfigValues.getDict().toString());
+            Debug.printToChat("");
+            Debug.printToChat(BulletConfigValues.getDict().toString());
         }
         return super.use(level, player, hand);
     }
