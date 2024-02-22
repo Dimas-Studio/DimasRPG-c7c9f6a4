@@ -2,8 +2,11 @@ package com.dimasrpg.config;
 
 import com.dimasrpg.DimasRPG;
 import com.google.common.reflect.TypeToken;
-import com.google.gson.*;
-
+import com.google.gson.JsonElement;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,26 +16,36 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Класс для работы с файлом конфига брони.
+ * Класс для работы с файлом конфига сущности.
  */
 public class BulletConfigFile {
-    public static String NAME = "bullet";
-    // Gson переменная для конвертации словаря в json строку и наоборот
+    private BulletConfigFile() { }
+
+    /**
+     * Имя конфига
+     */
+    private final static String NAME = "bullet";
+    /**
+     * Gson переменная для конвертации словаря в json строку и наоборот.
+     */
     public static final Gson GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .setPrettyPrinting().create();
 
-    // Инициализация конфига (вызывается из основного класса мода)
-    public static void init(String mod_id) {
-        if (!ConfigProvider.initConfigTypeFolder(NAME, mod_id)){
+    /**
+     * Инициализация конфига (вызывается из основного класса мода).
+     * @param modId Id мода
+     */
+    public static void init(String modId) {
+        if (!ConfigProvider.initConfigTypeFolder(NAME, modId)){
             return;
         }
         boolean one_config_is_valid = false;
-        File[] config_files = ConfigProvider.getPath(mod_id, NAME).listFiles();
+        File[] config_files = ConfigProvider.getPath(modId, NAME).listFiles();
         if (config_files == null || config_files.length == 0) {
             DimasRPG.LOGGER.warn(NAME + " directory is empty, generate default file");
             BulletConfigValues.setDefaultConfigValues();
-            generateDefaultConfig(ConfigProvider.getPath(mod_id, "minecraft.json"));
+            generateDefaultConfig(ConfigProvider.getPath(modId, "minecraft.json"));
             return;
         }
         for (File file : config_files) {
@@ -127,7 +140,7 @@ public class BulletConfigFile {
         } catch (IOException e) {
             // невозможно создать файл
             DimasRPG.LOGGER.warn("Could not save config file.");
-            e.printStackTrace();
+
         }
     }
 }
