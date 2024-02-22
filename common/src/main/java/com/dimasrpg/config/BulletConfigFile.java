@@ -18,11 +18,11 @@ import java.util.Map;
 /**
  * Класс для работы с файлом конфига сущности.
  */
-public class BulletConfigFile {
+public final class BulletConfigFile {
     private BulletConfigFile() { }
 
     /**
-     * Имя конфига
+     * Имя конфига.
      */
     private final static String NAME = "bullet";
     /**
@@ -36,41 +36,46 @@ public class BulletConfigFile {
      * Инициализация конфига (вызывается из основного класса мода).
      * @param modId Id мода
      */
-    public static void init(String modId) {
-        if (!ConfigProvider.initConfigTypeFolder(NAME, modId)){
+    public static void init(final String modId) {
+        if (!ConfigProvider.initConfigTypeFolder(NAME, modId)) {
             return;
         }
-        boolean one_config_is_valid = false;
-        File[] config_files = ConfigProvider.getPath(modId, NAME).listFiles();
-        if (config_files == null || config_files.length == 0) {
-            DimasRPG.LOGGER.warn(NAME + " directory is empty, generate default file");
+        boolean oneConfigIsValid = false;
+        File[] configFiles = ConfigProvider.getPath(modId, NAME).listFiles();
+        if (configFiles == null || configFiles.length == 0) {
+            DimasRPG.LOGGER.warn(
+                    NAME + " directory is empty, generate default file"
+            );
             BulletConfigValues.setDefaultConfigValues();
-            generateDefaultConfig(ConfigProvider.getPath(modId, "minecraft.json"));
+            generateDefaultConfig(ConfigProvider.getPath(
+                    modId, "minecraft.json"));
             return;
         }
-        for (File file : config_files) {
+        for (File file : configFiles) {
             JsonObject file_content = ConfigProvider.readConfig(file);
-            if (file_content == null){
+            if (file_content == null) {
                 DimasRPG.LOGGER.warn(file + " is empty!");
                 continue;
             }
-            if (!validateConfig(file_content)){
+            if (!validateConfig(file_content)) {
                 DimasRPG.LOGGER.warn(file + " is invalid!");
                 continue;
             }
-            one_config_is_valid = true;
+            oneConfigIsValid = true;
             for (Map.Entry<String, JsonElement> entry : file_content.entrySet()) {
                 String name = entry.getKey();
                 Type pattern = new TypeToken<Map<String, Float>>() {}.getType();
-                Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
+                Map<String, Float> innerMap = new Gson().fromJson(
+                        entry.getValue(), pattern);
                 for (String type : innerMap.keySet()) {
                     Float value = innerMap.get(type);
                     BulletConfigValues.put(name, type, value);
                 }
             }
         }
-        if (!one_config_is_valid) {
-            DimasRPG.LOGGER.warn("No valid files are in directory, using default values");
+        if (!oneConfigIsValid) {
+            DimasRPG.LOGGER.warn(
+                    "No valid files are in directory, using default values");
             BulletConfigValues.setDefaultConfigValues();
         }
     }
@@ -80,7 +85,8 @@ public class BulletConfigFile {
             try {
                 String name = entry.getKey();
                 Type pattern = new TypeToken<Map<String, Float>>() {}.getType();
-                Map<String, Float> innerMap = new Gson().fromJson(entry.getValue(), pattern);
+                Map<String, Float> innerMap = new Gson().fromJson(
+                        entry.getValue(), pattern);
                 for (String type : innerMap.keySet()) {
                     Float value = innerMap.get(type);
                     BulletConfigValues.put(name, type, value);
@@ -103,7 +109,7 @@ public class BulletConfigFile {
                         return false;
                     }
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 return false;
             }
         }
@@ -117,12 +123,14 @@ public class BulletConfigFile {
         // Общий словарь всего конфига
         HashMap<String, HashMap<String, Float>> items = new HashMap<>();
 
-        for(Object name : names) {
-            if(((String) name).matches("\\w+:\\w+")) {    // Провкрка на: "minecraft:creeper"
+        for (Object name : names) {
+            if (((String) name).matches("\\w+:\\w+")) {
+                // Провкрка на: "minecraft:creeper"
                 HashMap<String, Float> innerMap = new HashMap<>();
                 String[] types = BulletConfigValues.getTypes((String) name);
                 for (String type : types) {
-                    Float value = BulletConfigValues.getValue((String) name, type);
+                    Float value = BulletConfigValues.getValue(
+                            (String) name, type);
                     innerMap.put(type, value);
                 }
                 items.put((String) name, innerMap);

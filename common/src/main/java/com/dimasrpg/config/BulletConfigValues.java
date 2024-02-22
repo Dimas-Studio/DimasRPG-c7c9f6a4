@@ -3,12 +3,13 @@ package com.dimasrpg.config;
 import java.util.HashMap;
 import java.util.Set;
 
-public class BulletConfigValues implements ConfigValuesInterface{
+public final class BulletConfigValues implements ConfigValuesInterface {
     private BulletConfigValues() { }
     /**
      * Хранит в себе словарь из конфиг файла.
      */
-    private static final HashMap<String, HashMap<String, Float>> CONTENT = new HashMap<>();
+    private static final HashMap<String, HashMap<String, Float>> CONTENT =
+            new HashMap<>();
     /**
      * Получает словарь CONTENT.
      * @return словарь CONTENT
@@ -50,10 +51,10 @@ public class BulletConfigValues implements ConfigValuesInterface{
      * @param name название предмета
      * @return массив типов урона
      */
-    public static String[] getTypes(String name) {
-        if(CONTENT.containsKey(name)){
+    public static String[] getTypes(final String name) {
+        if (CONTENT.containsKey(name)) {
             Set<String> keys = CONTENT.get(name).keySet();
-            String types[] = new String[keys.size()];
+            String[] types = new String[keys.size()];
             types = keys.toArray(types);
             return types;
         }
@@ -65,9 +66,9 @@ public class BulletConfigValues implements ConfigValuesInterface{
      * @param type тип защиты
      * @return количество защиты
      */
-    public static Float getValue(String name, String type) {
-        if(CONTENT.containsKey(name)){
-            if(CONTENT.get(name).containsKey(type)) {
+    public static Float getValue(final String name, final String type) {
+        if (CONTENT.containsKey(name)) {
+            if (CONTENT.get(name).containsKey(type)) {
                 return CONTENT.get(name).get(type);
             }
         }
@@ -87,7 +88,7 @@ public class BulletConfigValues implements ConfigValuesInterface{
      * @param name название предмета
      * @return true, если предмет имеется в конфиге
      */
-    public static Boolean exist(String name) {
+    public static Boolean exist(final String name) {
         return CONTENT.containsKey(name);
     }
 }
