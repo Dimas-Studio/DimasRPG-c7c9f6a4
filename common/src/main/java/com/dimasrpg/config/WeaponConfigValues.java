@@ -3,7 +3,7 @@ package com.dimasrpg.config;
 import java.util.HashMap;
 import java.util.Set;
 
-public class WeaponConfigValues implements ConfigValuesInterface {
+public final class WeaponConfigValues implements ConfigValuesInterface {
     private WeaponConfigValues() { }
 
 
@@ -45,7 +45,8 @@ public class WeaponConfigValues implements ConfigValuesInterface {
      * @param type тип урона
      * @param value количество урона
      */
-    public static void put(final String name, final String type, final float value) {
+    public static void put(final String name, final String type,
+                           final float value) {
         HashMap<String, Float> innerMap = new HashMap<>();
         if (CONTENT.containsKey(name)) {
             innerMap = CONTENT.get(name);
