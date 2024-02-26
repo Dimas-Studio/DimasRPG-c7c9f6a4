@@ -1,6 +1,6 @@
 package com.dimasrpg.config;
 
-
+//@generated TODO:DELETE
 public class DefaultBulletValues {
     public static void init(){
 

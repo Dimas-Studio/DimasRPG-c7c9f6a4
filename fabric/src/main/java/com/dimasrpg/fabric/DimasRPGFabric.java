@@ -1,5 +1,5 @@
 package com.dimasrpg.fabric;
-
+//@generated
 import com.dimasrpg.fabriclike.DimasRPGFabricLike;
 import net.fabricmc.api.ModInitializer;
 

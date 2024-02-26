@@ -1,6 +1,7 @@
 package com.dimasrpg.item.custom;
 
 import com.dimasrpg.Debug;
+import com.dimasrpg.config.BulletConfigValues;
 import com.dimasrpg.config.WeaponConfigValues;
 import com.dimasrpg.config.ArmorConfigValues;
 import net.minecraft.world.InteractionHand;
@@ -14,17 +15,27 @@ import org.jetbrains.annotations.NotNull;
 
 
 public class ConfigCheckerItem extends Item {
-    public ConfigCheckerItem(Properties properties) {
+    /**
+     * Конструктор для предметов типа ConfigCheckerItem.
+     * @param properties свойства предмета
+     */
+    public ConfigCheckerItem(final Properties properties) {
         super(properties);
     }
 
-    /** Переопределение метода use для тестирования */
+    /** Переопределение метода use для тестирования. */
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, @NotNull InteractionHand hand) {
-        if(!level.isClientSide()) {
+    public @NotNull InteractionResultHolder<ItemStack> use(
+            final Level level,
+            final Player player,
+            final @NotNull InteractionHand hand) {
+        if (!level.isClientSide()) {
             Debug.printToChat("Hello world!");
             Debug.printToChat(WeaponConfigValues.getDict().toString());
+            Debug.printToChat("");
             Debug.printToChat(ArmorConfigValues.getDict().toString());
+            Debug.printToChat("");
+            Debug.printToChat(BulletConfigValues.getDict().toString());
         }
         return super.use(level, player, hand);
     }

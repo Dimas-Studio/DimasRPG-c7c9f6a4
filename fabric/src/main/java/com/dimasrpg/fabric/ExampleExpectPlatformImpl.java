@@ -1,5 +1,5 @@
 package com.dimasrpg.fabric;
-
+//@generated
 import com.dimasrpg.ExampleExpectPlatform;
 import net.fabricmc.loader.api.FabricLoader;
 

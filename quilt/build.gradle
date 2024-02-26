@@ -1,18 +1,18 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 repositories {
-    maven { url "https://maven.quiltmc.org/repository/release/" }
+    maven { url 'https://maven.quiltmc.org/repository/release/' }
 }
 
 architectury {
     platformSetupLoomIde()
-    loader("quilt")
+    loader('quilt')
 }
 
 loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
+    accessWidenerPath = project(':common').loom.accessWidenerPath
 }
 
 configurations {
@@ -29,31 +29,31 @@ dependencies {
     // Remove the next few lines if you don't want to depend on the API
     modApi("dev.architectury:architectury-fabric:${rootProject.architectury_version}") {
         // We must not pull Fabric Loader from Architectury Fabric
-        exclude group: "net.fabricmc"
-        exclude group: "net.fabricmc.fabric-api"
+        exclude group: 'net.fabricmc'
+        exclude group: 'net.fabricmc.fabric-api'
     }
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionQuilt")) { transitive false }
-    common(project(path: ":fabric-like", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":fabric-like", configuration: "transformProductionQuilt")) { transitive false }
+    common(project(path: ':common', configuration: 'namedElements')) { transitive false }
+    shadowCommon(project(path: ':common', configuration: 'transformProductionQuilt')) { transitive false }
+    common(project(path: ':fabric-like', configuration: 'namedElements')) { transitive false }
+    shadowCommon(project(path: ':fabric-like', configuration: 'transformProductionQuilt')) { transitive false }
 }
 
 processResources {
-    inputs.property "group", rootProject.maven_group
-    inputs.property "version", project.version
+    inputs.property 'group', rootProject.maven_group
+    inputs.property 'version', project.version
 
-    filesMatching("quilt.mod.json") {
-        expand "group": rootProject.maven_group,
-                "version": project.version
+    filesMatching('quilt.mod.json') {
+        expand 'group': rootProject.maven_group,
+               'version': project.version
     }
 }
 
 shadowJar {
-    exclude "architectury.common.json"
+    exclude 'architectury.common.json'
 
     configurations = [project.configurations.shadowCommon]
-    archiveClassifier = "dev-shadow"
+    archiveClassifier = 'dev-shadow'
 }
 
 remapJar {
@@ -63,7 +63,7 @@ remapJar {
 }
 
 sourcesJar {
-    def commonSources = project(":common").sourcesJar
+    def commonSources = project(':common').sourcesJar
     dependsOn commonSources
     from commonSources.archiveFile.map { zipTree(it) }
 }
@@ -77,7 +77,7 @@ components.java {
 publishing {
     publications {
         mavenQuilt(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
+            artifactId = rootProject.archives_base_name + '-' + project.name
             from components.java
         }
     }

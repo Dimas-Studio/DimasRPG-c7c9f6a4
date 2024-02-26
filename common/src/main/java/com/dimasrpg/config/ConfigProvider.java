@@ -12,19 +12,43 @@ import java.nio.file.Path;
 
 import static com.dimasrpg.ExampleExpectPlatform.getConfigDirectory;
 
+
 /**
- * Класс для работы с файлом конфига
+ * Класс для работы с файлом конфига.
  */
-public class ConfigProvider {
-    public static Path CONFDIR = getConfigDirectory();
+public final class ConfigProvider {
+    private ConfigProvider() { }
 
-    public static boolean checkAndCreateDir(Path path) {
+
+    /**
+     * Путь до директории с конфигами.
+     */
+    private static final Path CONFDIR = getConfigDirectory();
+
+
+    /**
+     * Получает путь до файла в папке с конфигами.
+     * @param modId Id мода
+     * @param file имя файла
+     * @return Путь до файла
+     */
+    public static File getPath(final String modId, final String file) {
+        return ConfigProvider.CONFDIR.resolve(modId).resolve(file).toFile();
+    }
+
+
+    /**
+     * Проверяет директорию на существование и создаёт её в противном случае.
+     * @param path путь до директории
+     * @return true, если директория существует или её удалось создать
+     */
+    public static boolean checkAndCreateDir(final Path path) {
         File folder = path.toFile();
-
-        // Проверяем, существует ли папка, и создаем ее, если необходимо
         if (!folder.exists()) {
             if (folder.mkdirs()) {
-                DimasRPG.LOGGER.info("Folder " + path + " created successfully!");
+                DimasRPG.LOGGER.info(
+                        "Folder " + path + " created successfully!"
+                );
                 return true;
             }
             DimasRPG.LOGGER.error("Failed to create folder " + path);
@@ -33,32 +57,46 @@ public class ConfigProvider {
         return true;
     }
 
-    public static boolean initConfigTypeFolder(String type, String mod_id) {
-        Path mod_configs = ConfigProvider.CONFDIR.resolve(mod_id);
-        if (!checkAndCreateDir(mod_configs)) {
+
+    /**
+     * Инициализация директории конфигов с определённым типом.
+     * @param type тип конфига
+     * @param modId ID мода
+     * @return true в случае успешного создания
+     */
+    public static boolean initConfigTypeFolder(
+            final String type, final String modId) {
+        Path modConfigs = ConfigProvider.CONFDIR.resolve(modId);
+        if (!checkAndCreateDir(modConfigs)) {
             return false;
         }
-        Path type_configs = mod_configs.resolve(type);
-        return checkAndCreateDir(type_configs);
+        Path typeConfigs = modConfigs.resolve(type);
+        return checkAndCreateDir(typeConfigs);
     }
 
-    public static JsonObject readConfig(File file) {
+
+    /**
+     * Чтение конфиг файла.
+     * @param file файл для чтения
+     * @return json объект с содержимым файла или null в случае ошибки
+     */
+    public static JsonObject readConfig(final File file) {
         try {
-            // Переменная для чтения файла
             BufferedReader reader =  new BufferedReader(new FileReader(file));
             JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
-            // Закрытие файла для чтения
             reader.close();
             return json;
         } catch (IOException e) {
-            // Невозможно открыть файл
             DimasRPG.LOGGER.warn("Could not read config file.");
-            e.printStackTrace();
         }
         return null;
     }
 
-    public static void createReadAllConfigs(){
+
+    /**
+     * Запуск всех конфиг-файлов на чтение.
+     */
+    public static void createReadAllConfigs() {
         WeaponConfigFile.init(DimasRPG.MOD_ID);
         ArmorConfigFile.init(DimasRPG.MOD_ID);
         BulletConfigFile.init(DimasRPG.MOD_ID);
