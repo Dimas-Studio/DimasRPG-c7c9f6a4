@@ -3,7 +3,7 @@ package com.dimasrpg.config;
 import java.util.HashMap;
 import java.util.Set;
 
-public final class ArmorConfigValues implements ConfigValuesInterface {
+public final class ArmorConfigValues {
     private ArmorConfigValues() { }
 
 
@@ -63,6 +63,7 @@ public final class ArmorConfigValues implements ConfigValuesInterface {
      * @param name название предмета
      * @return массив типов защиты
      */
+
     public static String[] getTypes(final String name) {
         if (CONTENT.containsKey(name)) {
             Set<String> keys = CONTENT.get(name).keySet();
