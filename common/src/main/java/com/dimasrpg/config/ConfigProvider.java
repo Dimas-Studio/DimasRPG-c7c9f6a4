@@ -12,16 +12,19 @@ import java.nio.file.Path;
 
 import static com.dimasrpg.ExampleExpectPlatform.getConfigDirectory;
 
+
 /**
  * Класс для работы с файлом конфига.
  */
 public final class ConfigProvider {
     private ConfigProvider() { }
 
+
     /**
      * Путь до директории с конфигами.
      */
     private static final Path CONFDIR = getConfigDirectory();
+
 
     /**
      * Получает путь до файла в папке с конфигами.
@@ -32,6 +35,7 @@ public final class ConfigProvider {
     public static File getPath(final String modId, final String file) {
         return ConfigProvider.CONFDIR.resolve(modId).resolve(file).toFile();
     }
+
 
     /**
      * Проверяет директорию на существование и создаёт её в противном случае.
@@ -52,6 +56,7 @@ public final class ConfigProvider {
         }
         return true;
     }
+
 
     /**
      * Инициализация директории конфигов с определённым типом.
@@ -86,6 +91,7 @@ public final class ConfigProvider {
         }
         return null;
     }
+
 
     /**
      * Запуск всех конфиг-файлов на чтение.

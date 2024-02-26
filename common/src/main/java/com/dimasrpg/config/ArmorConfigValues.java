@@ -6,11 +6,13 @@ import java.util.Set;
 public final class ArmorConfigValues {
     private ArmorConfigValues() { }
 
+
     /**
      * Хранит в себе словарь из конфиг файла.
      */
     private static final HashMap<String, HashMap<String, Float>> CONTENT
             = new HashMap<>();
+
 
     /**
      * Получает словарь CONTENT.
@@ -20,6 +22,7 @@ public final class ArmorConfigValues {
         return CONTENT;
     }
 
+
     /**
      * Устанавливает значения по умолчанию.
      */
@@ -27,12 +30,14 @@ public final class ArmorConfigValues {
         DefaultArmorValues.init();
     }
 
+
     /**
      * Очищает значения в словаре.
      */
     public static void clearDefaultConfigValues() {
         CONTENT.clear();
     }
+
 
     /**
      * Добавляет новый предмет в конфиг-словарь.
@@ -52,10 +57,11 @@ public final class ArmorConfigValues {
         CONTENT.put(name, innerMap);
     }
 
+
     /**
      * Получает массив типов защиты предмета.
      * @param name название предмета
-     * @return массив типов урона
+     * @return массив типов защиты
      */
 
     public static String[] getTypes(final String name) {
@@ -67,6 +73,7 @@ public final class ArmorConfigValues {
         }
         return null;
     }
+
 
     /**
      * Получает количество защиты определённого типа указанного предмета.
@@ -82,7 +89,7 @@ public final class ArmorConfigValues {
         }
         return null;
     }
-    // Метод получения множества ключей (имён предметов) из конфига
+
 
     /**
      * Получает множество всех предметов в конфиг-словаре.
@@ -92,7 +99,6 @@ public final class ArmorConfigValues {
         return CONTENT.keySet();
     }
 
-    // Метод проверки ключа (имени) на существование
 
     /**
      * Проверяет предмет на существование в конфиг-словаре.
